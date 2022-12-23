@@ -18,7 +18,7 @@
       </div>
       <div class="input">
         <label>Your Password</label>
-        <input type="text" placeholder="Password" class="text-box" [(ngModel)]="password" name="password" #passwordInput="ngModel" required>
+        <input type="password" placeholder="Password" class="text-box" [(ngModel)]="password" name="password" #passwordInput="ngModel" required>
         <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">*this field is required</div>
       </div>
       <button type="submit" class="submit" [disabled]="signUpForm.invalid">Sign up!</button>
