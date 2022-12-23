@@ -1,1 +1,117 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+  font-family: sans-serif;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+button{
+  cursor: pointer;
+}
+
+a{
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.header-title{
+  margin: 1%;
+  color: #454545;
+  display: inline-block;
+  font-size: 100px;
+}
+
+.container{
+  width: 25%;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  border: 2px solid #D9D9D9;
+  border-radius: 20px;
+}
+
+.title{
+  font-size: 48px;
+  margin: 3%;
+  color: #454545;
+}
+
+.form{
+  display: inline-block;
+  width: 70%;
+  text-align: center;
+}
+
+label{
+  margin: 3%;
+  color: #454545;
+  font-weight: bold;
+}
+
+.input{
+  margin: 10%;
+  text-align: left;
+}
+
+.text-box{
+  width: 100%;
+  padding: 5%;
+  font-size: 16px;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+}
+
+.error{
+  margin: 3%;
+  font-size: 12px;
+  color: #B9B9B9;
+}
+
+.submit{
+  width: 40%;
+  aspect-ratio: 3;
+  background-color: #2e52c4;
+  color: white;
+  border: 1px solid #2e52c4;
+  border-radius: 10px;
+}
+
+.submit:hover{
+  background-color: rgba(46, 82, 196, 0.75);
+}
+
+.submit:active{
+  background-color: rgba(46, 82, 196, 0.5);
+}
+
+.submit:disabled{
+  border-color: #B9B9B9;
+  background-color: #B9B9B9;
+}
+
+.create{
+  padding: 3%;
+  background-color: white;
+  color: #2e52c4;
+  border: none;
+  border-radius: 10px;
+}
+
+.create:hover{
+  background-color: #D9D9D9;
+}
+
+.create:active{
+  background-color: #B9B9B9;
+}

@@ -1,0 +1,23 @@
+<div class="header">
+  <img src="assets/img/58485771a6aca45b5a5c95b8.png" height="200px" alt="">
+  <p class="header-title"><span style="font-weight: bold; font-size: 100px">A</span>mail</p>
+</div>
+<div class="container">
+  <p class="title">Sign in</p>
+  <div class="form">
+    <form (ngSubmit)="validateUser()" #signInForm ="ngForm">
+      <div class="input">
+        <label>Your E-mail</label>
+        <input type="text" placeholder="E-mail" class="text-box" [(ngModel)]="email" name="email" #emailInput="ngModel" required email>
+        <div class="error" *ngIf="emailInput.invalid && emailInput.touched">*this field is required</div>
+      </div>
+      <div class="input">
+        <label>Your Password</label>
+        <input type="text" placeholder="Password" class="text-box" [(ngModel)]="password" name="password" #passwordInput="ngModel" required>
+        <div class="error" *ngIf="passwordInput.invalid && passwordInput.touched">*this field is required</div>
+      </div>
+      <button type="submit" class="submit" [disabled]="signInForm.invalid">Sign in!</button>
+    </form>
+    <p class="prompt">Don't have an account? <button class="create" routerLink="/sign-up">Create a new account</button></p>
+  </div>
+</div>
