@@ -1,6 +1,7 @@
 import {Component, Injectable, OnInit} from '@angular/core';
 import {User} from "../user";
 import {UserService} from "../user-service.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sign-up-page',
@@ -14,7 +15,7 @@ export class SignUpPageComponent implements OnInit {
   password: string | undefined;
   name: string | undefined;
 
-  constructor(private service : UserService) { }
+  constructor(private service : UserService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -27,6 +28,7 @@ export class SignUpPageComponent implements OnInit {
       }
       else {
         this.service.createUser(user).subscribe();
+        this.router.navigateByUrl('').then();
       }
     })
   }
