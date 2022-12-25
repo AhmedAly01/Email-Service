@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../user-service.service";
-import {User} from "../user";
+import { UserService } from "../user-service.service";
+import { User } from "../user";
+import { Router } from "@angular/router";
+import { AuthGuard } from "../guards/auth.guard";
+import {SignedInAuthGuard} from "../guards/signed-in-auth.guard";
 
 @Component({
   selector: 'app-sign-in-page',
@@ -11,16 +14,16 @@ export class SignInPageComponent implements OnInit {
   email: string | undefined;
   password: string | undefined;
 
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private signedAuth: SignedInAuthGuard) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   validateUser() {
     this.service.findUser(this.email).subscribe((data: User) => {
       if ( data != null && this.email == data.email && this.password == data.password) {
-        // we Sign the user in from here
-        alert("Singed in successfully!");
+        this.authGuard.isSignedIn = true;
+        this.signedAuth.isSignedIn = true;
+        this.router.navigateByUrl('home').then();
       }
       else if (data != null && this.email == data.email) {
         alert("Incorrect Password!");
