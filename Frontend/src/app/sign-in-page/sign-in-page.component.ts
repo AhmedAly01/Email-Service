@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from "../user-service.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-sign-in-page',
@@ -9,13 +11,23 @@ export class SignInPageComponent implements OnInit {
   email: string | undefined;
   password: string | undefined;
 
-  constructor() { }
+  constructor(private service: UserService) { }
 
   ngOnInit(): void {
   }
 
   validateUser() {
-    alert("my Email is " + this.email + " my password is " + this.password);
-    // here we will send a request to the backend to make sure email and password match a current user
+    this.service.findUser(this.email).subscribe((data: User) => {
+      if ( data != null && this.email == data.email && this.password == data.password) {
+        // we Sign the user in from here
+        alert("Singed in successfully!");
+      }
+      else if (data != null && this.email == data.email) {
+        alert("Incorrect Password!");
+      }
+      else {
+        alert("Email doesn't exist!");
+      }
+    })
   }
 }

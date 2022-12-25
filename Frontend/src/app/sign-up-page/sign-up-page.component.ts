@@ -1,21 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
+import {User} from "../user";
+import {UserService} from "../user-service.service";
 
 @Component({
   selector: 'app-sign-up-page',
   templateUrl: './sign-up-page.component.html',
   styleUrls: ['./sign-up-page.component.css']
 })
+
+@Injectable()
 export class SignUpPageComponent implements OnInit {
   email: string | undefined;
   password: string | undefined;
   name: string | undefined;
 
-  constructor() { }
+  constructor(private service : UserService) { }
 
   ngOnInit(): void {
   }
 
   createUser() {
-    // Here we will send a request to the back to create a new user
+    let user = new User(this.name, this.email, this.password);
+    this.service.findUser(this.email).subscribe((data: User) => {
+      if (data != null) {
+        alert("Email already exists!");
+      }
+      else {
+        this.service.createUser(user).subscribe();
+      }
+    })
   }
 }

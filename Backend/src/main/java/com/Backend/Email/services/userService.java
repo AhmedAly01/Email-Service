@@ -1,6 +1,5 @@
 package com.Backend.Email.services;
 
-import com.Backend.Email.exeption.userNotFoundException;
 import com.Backend.Email.model.User;
 import com.Backend.Email.repo.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,12 @@ public class userService {
         return userRepo.save(user);
     }
 
-    public User findUser(Long id) {
-        return userRepo.findUserById(id)
-                .orElseThrow(() -> new userNotFoundException("User by id " + id + " was not found!"));
+    public User findUser(String email) {
+        return userRepo.findUserByEmail(email)
+                .orElse(null);
     }
 
-    public void deleteUser(Long id) {
-        userRepo.deleteUserById(id);
+    public void deleteUser(String email) {
+        userRepo.deleteUserByEmail(email);
     }
 }
