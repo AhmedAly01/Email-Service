@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 public class UserResource {
     private final userService userService;
@@ -24,9 +25,9 @@ public class UserResource {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<User>  getUserById(@PathVariable("id") Long id){
-        User user =  userService.findUser(id);
+    @GetMapping("/find/{email}")
+    public ResponseEntity<User>  getUserById(@PathVariable("email") String email){
+        User user =  userService.findUser(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -38,14 +39,14 @@ public class UserResource {
 
     @PutMapping("/update")
     public ResponseEntity<User> updateUser(@RequestBody User user){
-        User updateUser = userService.addUser(user);
+        User updateUser = userService.updateUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{email}")
     @Transactional
-    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id){
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable("email") String email){
+        userService.deleteUser(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
