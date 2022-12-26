@@ -1,6 +1,6 @@
 package com.Backend.Email.repo;
 
-import com.Backend.Email.model.User;
+import com.Backend.Email.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

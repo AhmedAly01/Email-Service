@@ -1,4 +1,4 @@
-package com.Backend.Email.model;
+package com.Backend.Email.model.user;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
