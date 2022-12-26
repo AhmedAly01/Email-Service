@@ -1,24 +1,15 @@
 package com.Backend.Email.model.email;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class EmailBuilder {
-    private String from;
-    private String to; ///////////////
-    private String subject;
-    private Date date;
-    private String body;
-    private Object attachments;
-    private boolean read;
-    private Integer priority;
-
     Email email;
 
 
     public EmailBuilder(String from, String to){
         this.email = new Email();
         this.email.setFrom(from);
-        this.email.setTo(to);
     }
 
     public void setSubject(String subject) {
@@ -33,8 +24,8 @@ public class EmailBuilder {
         this.email.setBody(body);
     }
 
-    public void setAttachments(Object attachments) {
-        this.email.setAttachments(attachments);
+    public void setAttachments(ArrayList<Object> attachments) {
+//        this.email.setAttachments(attachments);
     }
 
     public void setRead(boolean read) {
@@ -43,6 +34,10 @@ public class EmailBuilder {
 
     public void setPriority(Integer priority) {
         this.email.setPriority(priority);
+    }
+
+    public void setTo(ArrayList<String> to) {
+//        this.email.setTo(to);
     }
 
     public Email getEmail(){

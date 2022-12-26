@@ -1,8 +1,11 @@
 package com.Backend.Email.model.user;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "User")
 public class User implements Serializable {
     @Id
     @Column(nullable = false)
@@ -10,6 +13,12 @@ public class User implements Serializable {
     private String name;
 
     private String password;
+
+    @ElementCollection
+    private ArrayList<Long> inbox;
+
+    @ElementCollection
+    private ArrayList<Long> sent;
 
     public String getPassword() {
         return password;

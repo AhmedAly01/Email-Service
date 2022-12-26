@@ -2,40 +2,39 @@ package com.Backend.Email.model.email;
 
 import jakarta.persistence.*;
 
+import jakarta.persistence.Id;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
+@Table(name = "massages")
 public class Email implements Serializable {
     @Id
-    @Column(nullable = false)
-    private String from;
-    private String to; ///////////////
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
+    private Long id;
+
+    private String fromWho;
+    @ElementCollection
+    private ArrayList<String> toWho; ///////////////
     private String subject;
     private Date date;
     private String body;
-    private Object attachments;
-    private boolean read;
-    private Integer priority;
 
-    public Email() {
-        this.from = null;
-        this.to = null;
-        this.subject = null;
-        this.date = null;
-        this.body = null;
-        this.attachments = null;
-        this.read = false;
-        this.priority = null;
-    }
+    @ElementCollection
+    private ArrayList<String> attachments; /////// Turn the object to string and save cuz sql retarted
+    private boolean seen;
+    private Integer importance;
 
     public void setFrom(String from) {
-        this.from = from;
+        this.fromWho = from;
     }
 
-    public void setTo(String to) {
-        this.to = to;
+    public void setTo(ArrayList<String> to) {
+        this.toWho = to;
     }
 
     public void setSubject(String subject) {
@@ -50,29 +49,27 @@ public class Email implements Serializable {
         this.body = body;
     }
 
-    public void setAttachments(Object attachments) {
-        this.attachments = attachments;
-    }
+//    public void setAttachments(ArrayList<Object> attachments) {
+//        this.attachments = attachments;
+//    }
 
     public void setRead(boolean read) {
-        this.read = read;
+        this.seen = read;
     }
 
     public void setPriority(Integer priority) {
-        this.priority = priority;
+        this.importance = priority;
     }
 
-    @Override
-    public String toString() {
-        return "Email{" +
-                "from='" + from + '\'' +
-                ", to='" + to + '\'' +
-                ", subject='" + subject + '\'' +
-                ", date=" + date +
-                ", body='" + body + '\'' +
-                ", attachments=" + attachments +
-                ", read=" + read +
-                ", priority=" + priority +
-                '}';
+    public Long getId() {
+        return id;
+    }
+
+    public String getFromWho() {
+        return fromWho;
+    }
+
+    public ArrayList<String> getToWho() {
+        return toWho;
     }
 }
