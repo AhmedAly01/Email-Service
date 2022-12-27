@@ -73,7 +73,7 @@ public class UserResource {
         emailBuilder.setTo(new ArrayList<String>((Collection<? extends String>)(res.get("to"))));
         emailBuilder.setSubject(res.get("subject").toString());
         emailBuilder.setBody(res.get("body").toString());
-        emailBuilder.setPriority(res.get("priority").toString());
+        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
         emailBuilder.setDate(new Date());
         emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
 //        emailBuilder.setAttachments();
