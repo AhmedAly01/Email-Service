@@ -1,6 +1,6 @@
 package com.Backend.Email.services;
 
-import com.Backend.Email.model.User;
+import com.Backend.Email.model.user.User;
 import com.Backend.Email.repo.userRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
