@@ -70,9 +70,10 @@ public class User implements Serializable {
     }
 
 
-    public ArrayList<Integer> sendEmail(userService userService, Email email){
+    public void sendEmail(userService userService, Email email){
+        this.sent.add(email.getId());
         userService.updateUser(this);
-        ArrayList<Integer> notExist = new ArrayList<>();
+        ArrayList<String> notExist = new ArrayList<>();
         List<String> toWho = email.getToWho();
         for(int i=0;i<toWho.size();i++){
             User toWhom = userService.findUser(toWho.get(i));
@@ -80,13 +81,9 @@ public class User implements Serializable {
                 toWhom.inbox.add(email.getId());
                 userService.updateUser(toWhom);
             }else
-                notExist.add(i);
+                notExist.add(toWho.get(i));
         }
-
-        if(notExist.size() != toWho.size())
-            this.sent.add(email.getId());
-
-        return notExist;
+        
     }
 
     public List<Long> getSent() {

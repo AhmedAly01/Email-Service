@@ -60,7 +60,7 @@ public class UserResource {
     }
 
     @PostMapping("/email/compose")
-    public ResponseEntity<List<Integer>> sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
+    public ResponseEntity sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
         emailBuilder.setFrom(res.get("from").toString());
@@ -77,10 +77,10 @@ public class UserResource {
 
         if(user != null) {
             System.out.println(email.toString());
-            notExist = user.sendEmail(userService, email);
+            user.sendEmail(userService, email);
         }
 
-        return new ResponseEntity<>(notExist ,HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
