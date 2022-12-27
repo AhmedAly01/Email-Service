@@ -5,12 +5,12 @@
   </div>
   <div>
     <input class="search-bar" type="text" placeholder="Search">
-    <button class="folder-btn" ><img src="assets/img/compose.svg" height="25" width="25" alt="Text"><span> Compose</span></button>
-    <button class="folder-btn" ><img src="assets/img/inbox.svg" height="25" width="25" alt="Text"><span> Inbox</span></button>
-    <button class="folder-btn" ><img src="assets/img/sent.svg" height="25" width="25" alt="Text"><span> Sent</span></button>
-    <button class="folder-btn" ><img src="assets/img/draft.svg" height="25" width="25" alt="Text"><span> Drafts</span></button>
-    <button class="folder-btn" ><img src="assets/img/contacts.svg" height="25" width="25" alt="Text"><span> Contacts</span></button>
-    <button class="folder-btn" ><img src="assets/img/trash.svg" height="25" width="25" alt="Text"><span> Trash</span></button>
+    <button class="folder-btn" [routerLink]="['/home/compose']"><img src="assets/img/compose.svg" height="25" width="25" alt="Text"><span> Compose</span></button>
+    <button class="folder-btn" [routerLink]="['/home/inbox']"><img src="assets/img/inbox.svg" height="25" width="25" alt="Text"><span> Inbox</span></button>
+    <button class="folder-btn" [routerLink]="['/home/sent']"><img src="assets/img/sent.svg" height="25" width="25" alt="Text"><span> Sent</span></button>
+    <button class="folder-btn" [routerLink]="['/home/drafts']"><img src="assets/img/draft.svg" height="25" width="25" alt="Text"><span> Drafts</span></button>
+    <button class="folder-btn" [routerLink]="['/home/contacts']"><img src="assets/img/contacts.svg" height="25" width="25" alt="Text"><span> Contacts</span></button>
+    <button class="folder-btn" [routerLink]="['/home/trash']"><img src="assets/img/trash.svg" height="25" width="25" alt="Text"><span> Trash</span></button>
 
   </div>
 </div>

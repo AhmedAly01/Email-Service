@@ -17,4 +17,8 @@ export class UserService {
   findUser(email: string | undefined){
     return this.http.get<User>("http://localhost:8080/user/find/" + email);
   }
+
+  getPosts(){
+    return this.http.get("https://jsonplaceholder.typicode.com/posts");
+  }
 }
