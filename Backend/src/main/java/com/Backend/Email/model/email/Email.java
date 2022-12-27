@@ -68,6 +68,30 @@ public class Email implements Serializable {
         return id;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public List<String> getAttachments() {
+        return attachments;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public Integer getImportance() {
+        return importance;
+    }
+
     public String getFromWho() {
         return fromWho;
     }

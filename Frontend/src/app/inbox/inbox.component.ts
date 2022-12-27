@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../user-service.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-inbox',
@@ -7,11 +8,11 @@ import {UserService} from "../user-service.service";
   styleUrls: ['./inbox.component.css']
 })
 export class InboxComponent implements OnInit {
-  POSTS: any;
+  EMAILS: any;
   page: number = 1;
   count: number = 0;
-  tableSize: number = 10;
-
+  tableSize: number = 11;
+  inbox: number[] | undefined = [];
 
   constructor(private service: UserService) { }
 
@@ -20,13 +21,13 @@ export class InboxComponent implements OnInit {
   }
 
   getPosts(){
-    this.service.getPosts().subscribe(
-      (response) => {
-        this.POSTS = response;
-      }, (error) => {
-        console.log(error)
-      }
-    )
+    this.service.findUser(this.service.email).subscribe((data: User) => {
+      this.inbox = data.inbox;
+      console.log(this.inbox);
+      this.service.getEmails(this.inbox!).subscribe((response: any) =>{
+        this.EMAILS = response;
+      });
+    });
   }
 
   onTableDataChange(event: any) {

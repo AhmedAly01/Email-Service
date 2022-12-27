@@ -96,13 +96,10 @@ public class UserResource {
 
 
     @GetMapping("/email/getEmails/{ids}")
-    public ResponseEntity<String>  getEmails(@PathVariable List<Long> ids) throws JsonProcessingException {
+    public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids){
         List<Email> emails = emailService.findEmails(ids);
-
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(emails);
-        System.out.println(json);
-        return new ResponseEntity<>(emails.toString(), HttpStatus.OK);
+        System.out.println(emails.toString());
+        return new ResponseEntity<>(emails, HttpStatus.OK);
     }
 
     @DeleteMapping("/email/delete/{email}/{id}/{folderName}")

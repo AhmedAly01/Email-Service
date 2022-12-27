@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from "../user-service.service";
+import {User} from "../user";
 
 @Component({
   selector: 'app-sent',
@@ -6,29 +8,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sent.component.css']
 })
 export class SentComponent implements OnInit {
-  emails = [
-    {id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},
-    {id: 4, name:'Flash', date:'20:00'}
-  ];
+  EMAILS: any;
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 11;
+  sent: number[] | undefined = [];
 
-  constructor() { }
+  constructor(private service: UserService) { }
 
   ngOnInit(): void {
+    this.getPosts();
   }
 
+  getPosts(){
+    this.service.findUser(this.service.email).subscribe((data: User) => {
+      this.sent = data.sent;
+      console.log(this.sent);
+      this.service.getEmails(this.sent!).subscribe((response: any) =>{
+        this.EMAILS = response;
+      });
+    });
+  }
+
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getPosts();
+  }
 }
