@@ -40,6 +40,7 @@ public class UserResource {
     @GetMapping("/user/find/{email}")
     public ResponseEntity<User>  getUserById(@PathVariable("email") String email){
         User user =  userService.findUser(email);
+        System.out.println(email.toString());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -54,6 +55,7 @@ public class UserResource {
         User updateUser = userService.updateUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
+
 
     @DeleteMapping("/user/delete/{email}")
     @Transactional
@@ -71,6 +73,7 @@ public class UserResource {
         emailBuilder.setTo(new ArrayList<String>((Collection<? extends String>)(res.get("to"))));
         emailBuilder.setSubject(res.get("subject").toString());
         emailBuilder.setBody(res.get("body").toString());
+        emailBuilder.setPriority(res.get("priority").toString());
         emailBuilder.setDate(new Date());
         emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
 //        emailBuilder.setAttachments();
