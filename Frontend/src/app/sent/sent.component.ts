@@ -34,4 +34,8 @@ export class SentComponent implements OnInit {
     this.page = event;
     this.getPosts();
   }
+
+  deleteEmail(email: any) {
+    this.service.deleteEmails(email.id, this.service.email, "sent");
+  }
 }

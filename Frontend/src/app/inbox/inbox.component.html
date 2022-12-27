@@ -16,6 +16,7 @@
       <td>{{email.fromWho}}</td>
       <td>{{email.subject}}</td>
       <td>{{email.date}}</td>
+      <td (click)="deleteEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
   <pagination-controls

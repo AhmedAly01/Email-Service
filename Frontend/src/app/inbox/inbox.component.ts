@@ -23,7 +23,6 @@ export class InboxComponent implements OnInit {
   getPosts(){
     this.service.findUser(this.service.email).subscribe((data: User) => {
       this.inbox = data.inbox;
-      console.log(this.inbox);
       this.service.getEmails(this.inbox!).subscribe((response: any) =>{
         this.EMAILS = response;
       });
@@ -35,4 +34,7 @@ export class InboxComponent implements OnInit {
     this.getPosts();
   }
 
+  deleteEmail(email: any) {
+    this.service.deleteEmails(email.id, this.service.email, "inbox");
+  }
 }
