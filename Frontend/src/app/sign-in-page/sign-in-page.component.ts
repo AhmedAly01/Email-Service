@@ -24,7 +24,6 @@ export class SignInPageComponent implements OnInit {
         this.authGuard.isSignedIn = true;
         this.signedAuth.isSignedIn = true;
         this.router.navigateByUrl('home').then();
-        console.log(JSON.stringify(data));
       }
       else if (data != null && this.email == data.email) {
         alert("Incorrect Password!");
