@@ -3,11 +3,9 @@ package com.Backend.Email.model.email;
 import jakarta.persistence.*;
 
 import jakarta.persistence.Id;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -80,7 +78,7 @@ public class Email implements Serializable {
         return body;
     }
 
-    public List<String> getAttachments() {
+    public byte[] getAttachments() {
         return attachments;
     }
 
@@ -98,29 +96,5 @@ public class Email implements Serializable {
 
     public List<String> getToWho() {
         return toWho;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public byte[] getAttachments() {
-        return attachments;
-    }
-
-    public boolean isSeen() {
-        return seen;
-    }
-
-    public Integer getImportance() {
-        return importance;
     }
 }

@@ -86,9 +86,14 @@ public class User implements Serializable {
         
     }
 
-    public void deleteEmail(Long id){
-        this.sent.remove(Long.valueOf(id));
-        this.inbox.remove(Long.valueOf(id));
+    public void deleteEmail(Long id, String folderName){
+        if(folderName.equals("inbox"))
+            this.inbox.remove(Long.valueOf(id));
+        else if (folderName.equals("sent")) {
+            this.sent.remove(Long.valueOf(id));
+        }
+
+
         this.deleted.add(id);
     }
 

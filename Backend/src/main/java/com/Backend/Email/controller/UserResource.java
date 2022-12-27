@@ -104,9 +104,9 @@ public class UserResource {
 
     @DeleteMapping("/email/delete/{email}/{id}/{folderName}")
     @Transactional
-    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("from") String email){
+    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("from") String email, @PathVariable("folderName") String folderName){
         User user = userService.findUser(email);
-
+        user.deleteEmail(id, folderName);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
