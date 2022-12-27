@@ -3,7 +3,7 @@ import { UserService } from "../user-service.service";
 import { User } from "../user";
 import { Router } from "@angular/router";
 import { AuthGuard } from "../guards/auth.guard";
-import {SignedInAuthGuard} from "../guards/signed-in-auth.guard";
+import { SignedInAuthGuard } from "../guards/signed-in-auth.guard";
 
 @Component({
   selector: 'app-sign-in-page',

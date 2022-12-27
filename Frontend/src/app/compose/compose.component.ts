@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Email} from "../email";
+import {UserService} from "../user-service.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-compose',
@@ -9,16 +11,16 @@ import {Email} from "../email";
 export class ComposeComponent implements OnInit {
 
   from: string | undefined;
-  to: string[] | undefined;
+  to: string | undefined;
+  receivers: string[] | undefined = [];
   subject: string | undefined;
-  date: object | undefined;
   body: string | undefined;
-  attachments: object[] | undefined;
+  attachments: object[] | undefined = [];
   priority: number | undefined;
   fileName: string = '';
   files: string[] | undefined = [];
 
-  constructor() { }
+  constructor(private service: UserService, private http: HttpClient) { }
 
   ngOnInit(): void {}
 
@@ -34,6 +36,15 @@ export class ComposeComponent implements OnInit {
   }
 
   sendEmail(){
+    this.from = this.service.email;
+    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    console.log(email);
+    this.service.sendEmail(email).subscribe();
+  }
 
+  appendReceiver() {
+    if (this.to != null) {
+      this.receivers?.push(this.to);
+    }
   }
 }

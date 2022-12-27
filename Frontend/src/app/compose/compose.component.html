@@ -1,10 +1,14 @@
 <app-home></app-home>
 <div class="email-container">
-  <form #emailCompose ="ngForm" class="form-compose">
+  <form #emailCompose ="ngForm" class="form-compose" (ngSubmit)="sendEmail()">
     <div class="input-compose">
       <label>To</label>
-      <input type="text" placeholder="To" class="text-box-compose" [(ngModel)]="to" name="to" #toInput="ngModel" required email>
-      <div class="error" *ngIf="toInput.invalid && toInput.touched">*this field is required</div>
+      <table style="margin-bottom: 1%">
+        <tr *ngFor="let receiver of receivers">
+          <td style="border: none; text-align: left">{{receiver}}</td>
+        </tr>
+      </table>
+      <input type="text" placeholder="To" class="text-box-compose" (keyup.enter)="appendReceiver()" [(ngModel)]="to" name="to" required>
     </div>
     <div class="input-compose">
       <label>Subject</label>
@@ -16,22 +20,22 @@
       <textarea placeholder="body" class="text-area-compose" [(ngModel)]="body" name="body" #bodyInput="ngModel" required></textarea>
       <div class="error" *ngIf="bodyInput.invalid && bodyInput.touched">*this field is required</div>
     </div>
-    <div class="input-compose">
-      <table style="margin-bottom: 1%">
-        <tr *ngFor="let file of files">
-          <td style="border: none; text-align: left">{{file}}</td>
-        </tr>
-      </table>
-      <input type="file" class="file-input"
-             (change)="onFileSelected($event)" #fileUpload>
-      <div class="file-upload" style="font-size: 18px">
-        {{fileName || "No file uploaded yet."}}
-        <button class="send-btn"
-                (click)="fileUpload.click()">
-          attach_file
-        </button>
-      </div>
-    </div>
     <button type="submit" class="send-btn" [disabled]="emailCompose.invalid">Send!</button>
   </form>
+  <div class="input-compose">
+    <table style="margin-bottom: 1%">
+      <tr *ngFor="let file of files">
+        <td style="border: none; text-align: left">{{file}}</td>
+      </tr>
+    </table>
+    <input type="file" class="file-input"
+           (change)="onFileSelected($event)" #fileUpload>
+    <div class="file-upload" style="font-size: 18px">
+      {{fileName || "No file uploaded yet."}}
+      <button class="send-btn"
+              (click)="fileUpload.click()">
+        attach_file
+      </button>
+    </div>
+  </div>
 </div>

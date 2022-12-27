@@ -9,8 +9,7 @@ export class Email {
   private priority: number | undefined;
 
 
-  constructor(id?: number, from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: object[], priority?: number) {
-    this.id = id;
+  constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: object[], priority?: number) {
     this.from = from;
     this.to = to;
     this.subject = subject;

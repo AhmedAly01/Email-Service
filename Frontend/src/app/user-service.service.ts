@@ -1,12 +1,25 @@
 import { Injectable } from '@angular/core';
 import {User} from "./user";
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {Email} from "./email";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  user: Observable<User> | undefined;
+  email: string | undefined;
+
+
+  getUser(): Observable<User> | undefined {
+    return this.user;
+  }
+
+  setUser(value: Observable<User> | undefined) {
+    this.user = value;
+  }
 
   constructor(private http: HttpClient) { }
 
@@ -15,7 +28,14 @@ export class UserService {
   }
 
   findUser(email: string | undefined){
-    return this.http.get<User>("http://localhost:8080/user/find/" + email);
+    this.user = this.http.get<User>("http://localhost:8080/user/find/" + email);
+    this.email = email;
+    return this.user
+
+  }
+
+  sendEmail(email: Email){
+    return this.http.post<Email>("http://localhost:8080/email/compose", email);
   }
 
   getPosts(){
