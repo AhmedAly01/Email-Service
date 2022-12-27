@@ -12,15 +12,6 @@ export class UserService {
   user: Observable<User> | undefined;
   email: string | undefined;
 
-
-  getUser(): Observable<User> | undefined {
-    return this.user;
-  }
-
-  setUser(value: Observable<User> | undefined) {
-    this.user = value;
-  }
-
   constructor(private http: HttpClient) { }
 
   createUser(user: User) {
@@ -38,7 +29,9 @@ export class UserService {
     return this.http.post<Email>("http://localhost:8080/email/compose", email);
   }
 
-  getPosts(){
-    return this.http.get("https://jsonplaceholder.typicode.com/posts");
+  getEmails(ids: number[]){
+    console.log(ids);
+    return this.http.get("http://localhost:8080/email/getEmails/" + ids);
   }
+
 }

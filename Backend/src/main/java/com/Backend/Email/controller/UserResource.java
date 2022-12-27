@@ -85,10 +85,10 @@ public class UserResource {
 
 
     @GetMapping("/email/getEmails/{ids}")
-    public ResponseEntity<String>  getEmails(@PathVariable List<Long> ids){
+    public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids){
         List<Email> emails = emailService.findEmails(ids);
         System.out.println(emails.toString());
-        return new ResponseEntity<>(emails.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(emails, HttpStatus.OK);
     }
 
 
