@@ -1,5 +1,7 @@
 package com.Backend.Email.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.*;
 
 @CrossOrigin
@@ -37,6 +40,7 @@ public class UserResource {
     @GetMapping("/user/find/{email}")
     public ResponseEntity<User>  getUserById(@PathVariable("email") String email){
         User user =  userService.findUser(email);
+        System.out.println(email.toString());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -52,6 +56,7 @@ public class UserResource {
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
+
     @DeleteMapping("/user/delete/{email}")
     @Transactional
     public ResponseEntity<?> deleteUser(@PathVariable("email") String email){
@@ -61,17 +66,23 @@ public class UserResource {
 
     @PostMapping("/email/compose")
     public ResponseEntity sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
+
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
         emailBuilder.setFrom(res.get("from").toString());
         emailBuilder.setTo(new ArrayList<String>((Collection<? extends String>)(res.get("to"))));
         emailBuilder.setSubject(res.get("subject").toString());
         emailBuilder.setBody(res.get("body").toString());
+        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
         emailBuilder.setDate(new Date());
-
+        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
+//        emailBuilder.setAttachments();
         User user = userService.findUser(res.get("from").toString());
 
         Email email = emailService.addEmail(emailBuilder.getEmail());
+
+
+        System.out.println(email.toString());
 
         List<Integer> notExist = null;
 
@@ -89,6 +100,14 @@ public class UserResource {
         List<Email> emails = emailService.findEmails(ids);
         System.out.println(emails.toString());
         return new ResponseEntity<>(emails, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/email/delete/{email}/{id}/{folderName}")
+    @Transactional
+    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("from") String email){
+        User user = userService.findUser(email);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

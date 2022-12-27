@@ -1,7 +1,9 @@
 package com.Backend.Email.model.email;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class EmailBuilder {
     Email email;
@@ -27,7 +29,7 @@ public class EmailBuilder {
         this.email.setBody(body);
     }
 
-    public void setAttachments(ArrayList<String> attachments) {
+    public void setAttachments(byte[] attachments) {
         this.email.setAttachments(attachments);
     }
 

@@ -3,6 +3,8 @@ package com.Backend.Email.model.email;
 import jakarta.persistence.*;
 
 import jakarta.persistence.Id;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +25,10 @@ public class Email implements Serializable {
     private String subject;
     private Date date;//////
     private String body;
-    @ElementCollection
-    private List<String> attachments; /////// Turn the object to string and save cuz sql retarted
+
+    @Lob
+    @Column(name="file", columnDefinition = "BLOB")
+    private byte[] attachments; /////// Turn the object to string and save cuz sql retarted
     private boolean seen;//////
     private Integer importance;///////
 
@@ -48,7 +52,7 @@ public class Email implements Serializable {
         this.body = body;
     }
 
-    public void setAttachments(List<String> attachments) {
+    public void setAttachments(byte[] attachments) {
         this.attachments = attachments;
     }
 
@@ -96,18 +100,27 @@ public class Email implements Serializable {
         return toWho;
     }
 
-    @Override
-    public String toString() {
-        return "Email{" +
-                "id=" + id +
-                ", fromWho='" + fromWho + '\'' +
-                ", toWho=" + toWho +
-                ", subject='" + subject + '\'' +
-                ", date=" + date +
-                ", body='" + body + '\'' +
-                ", attachments=" + attachments +
-                ", seen=" + seen +
-                ", importance=" + importance +
-                '}';
+    public String getSubject() {
+        return subject;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public byte[] getAttachments() {
+        return attachments;
+    }
+
+    public boolean isSeen() {
+        return seen;
+    }
+
+    public Integer getImportance() {
+        return importance;
     }
 }
