@@ -1,0 +1,21 @@
+<app-home></app-home>
+<div class="email-container">
+  <table>
+    <tr *ngFor="let post of POSTS | paginate
+              : {
+                  itemsPerPage: tableSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index">
+      <td>{{post.id}}</td>
+      <td>{{post.title}}</td>
+    </tr>
+  </table>
+  <pagination-controls
+    previousLabel="Prev"
+    nextLabel="Next"
+    (pageChange)="onTableDataChange($event)"
+  >
+  </pagination-controls>
+</div>
