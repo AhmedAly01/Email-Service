@@ -1,10 +1,27 @@
 <app-home></app-home>
 <div class="email-container">
   <table>
-    <tr *ngFor="let email of emails">
-      <td>{{email.id}}</td>
-      <td>{{email.name}}</td>
+    <tr style="background-color: #D9D9D9">
+      <td>to</td>
+      <td>subject</td>
+      <td>date</td>
+    </tr>
+    <tr *ngFor="let email of EMAILS | paginate
+              : {
+                  itemsPerPage: tableSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index">
+      <td>{{email.toWho}}</td>
+      <td>{{email.subject}}</td>
       <td>{{email.date}}</td>
     </tr>
   </table>
+  <pagination-controls
+    previousLabel="Prev"
+    nextLabel="Next"
+    (pageChange)="onTableDataChange($event)"
+  >
+  </pagination-controls>
 </div>

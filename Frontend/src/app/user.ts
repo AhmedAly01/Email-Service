@@ -2,6 +2,8 @@ export class User {
   name: string | undefined;
   email: string | undefined;
   password: string | undefined;
+  inbox: number[] | undefined;
+  sent: number[] | undefined;
 
 
   constructor(name?: string, email?: string, password?: string) {
