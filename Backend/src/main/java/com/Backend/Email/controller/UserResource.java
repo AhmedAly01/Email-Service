@@ -3,6 +3,7 @@ package com.Backend.Email.controller;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
+import com.Backend.Email.repo.EmailRepo;
 import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.userService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,7 +43,6 @@ public class UserResource {
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user){
         User newUser = userService.addUser(user);
-        System.out.println("asdfasdf");
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
@@ -60,7 +60,7 @@ public class UserResource {
     }
 
     @PostMapping("/email/compose")
-    public ResponseEntity<User> sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
+    public ResponseEntity sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
         emailBuilder.setFrom(res.get("from").toString());
@@ -68,17 +68,27 @@ public class UserResource {
         emailBuilder.setSubject(res.get("subject").toString());
         emailBuilder.setBody(res.get("body").toString());
         emailBuilder.setDate(new Date());
-        Email email = emailBuilder.getEmail();
 
-        System.out.println(email.toString());
+        User user = userService.findUser(res.get("from").toString());
 
-        User user = userService.findUser(email.getFromWho());
+        Email email = emailService.addEmail(emailBuilder.getEmail());
+
+        List<Integer> notExist = null;
 
         if(user != null) {
+            System.out.println(email.toString());
             user.sendEmail(userService, email);
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/email/getEmails/{ids}")
+    public ResponseEntity<String>  getEmails(@PathVariable List<Long> ids){
+        List<Email> emails = emailService.findEmails(ids);
+        System.out.println(emails.toString());
+        return new ResponseEntity<>(emails.toString(), HttpStatus.OK);
     }
 
 

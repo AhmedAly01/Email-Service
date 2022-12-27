@@ -4,6 +4,7 @@ import com.Backend.Email.services.userService;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -21,6 +22,9 @@ public class User implements Serializable {
 
     @ElementCollection
     private List<Long> sent;
+
+    @ElementCollection
+    private List<Long> deleted;
 
     public String getPassword() {
         return password;
@@ -66,10 +70,10 @@ public class User implements Serializable {
     }
 
 
-    public int sendEmail(userService userService, Email email){
+    public void sendEmail(userService userService, Email email){
         this.sent.add(email.getId());
         userService.updateUser(this);
-        List<Long> notExist;
+        ArrayList<String> notExist = new ArrayList<>();
         List<String> toWho = email.getToWho();
         for(int i=0;i<toWho.size();i++){
             User toWhom = userService.findUser(toWho.get(i));
@@ -77,8 +81,16 @@ public class User implements Serializable {
                 toWhom.inbox.add(email.getId());
                 userService.updateUser(toWhom);
             }else
-                return i;
+                notExist.add(toWho.get(i));
         }
-        return 500;
+        
+    }
+
+    public List<Long> getSent() {
+        return sent;
+    }
+
+    public List<Long> getInbox() {
+        return inbox;
     }
 }
