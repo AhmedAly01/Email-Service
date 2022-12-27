@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,21 +14,19 @@ import java.util.List;
 @Table(name = "massages")
 public class Email implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false)
     private Long id;
-
     private String fromWho;
     @ElementCollection
-    private ArrayList<String> toWho; ///////////////
+    private List<String> toWho;
     private String subject;
-    private Date date;
+    private Date date;//////
     private String body;
-
     @ElementCollection
-    private ArrayList<String> attachments; /////// Turn the object to string and save cuz sql retarted
-    private boolean seen;
-    private Integer importance;
+    private List<String> attachments; /////// Turn the object to string and save cuz sql retarted
+    private boolean seen;//////
+    private Integer importance;///////
 
     public void setFrom(String from) {
         this.fromWho = from;
@@ -49,9 +48,9 @@ public class Email implements Serializable {
         this.body = body;
     }
 
-//    public void setAttachments(ArrayList<Object> attachments) {
-//        this.attachments = attachments;
-//    }
+    public void setAttachments(List<String> attachments) {
+        this.attachments = attachments;
+    }
 
     public void setRead(boolean read) {
         this.seen = read;
@@ -69,7 +68,22 @@ public class Email implements Serializable {
         return fromWho;
     }
 
-    public ArrayList<String> getToWho() {
+    public List<String> getToWho() {
         return toWho;
+    }
+
+    @Override
+    public String toString() {
+        return "Email{" +
+                "id=" + id +
+                ", fromWho='" + fromWho + '\'' +
+                ", toWho=" + toWho +
+                ", subject='" + subject + '\'' +
+                ", date=" + date +
+                ", body='" + body + '\'' +
+                ", attachments=" + attachments +
+                ", seen=" + seen +
+                ", importance=" + importance +
+                '}';
     }
 }

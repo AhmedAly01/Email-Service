@@ -7,8 +7,11 @@ public class EmailBuilder {
     Email email;
 
 
-    public EmailBuilder(String from, String to){
+    public EmailBuilder(){
         this.email = new Email();
+    }
+
+    public  void setFrom(String from){
         this.email.setFrom(from);
     }
 
@@ -24,8 +27,8 @@ public class EmailBuilder {
         this.email.setBody(body);
     }
 
-    public void setAttachments(ArrayList<Object> attachments) {
-//        this.email.setAttachments(attachments);
+    public void setAttachments(ArrayList<String> attachments) {
+        this.email.setAttachments(attachments);
     }
 
     public void setRead(boolean read) {
@@ -37,7 +40,7 @@ public class EmailBuilder {
     }
 
     public void setTo(ArrayList<String> to) {
-//        this.email.setTo(to);
+        this.email.setTo(to);
     }
 
     public Email getEmail(){

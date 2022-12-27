@@ -1,4 +1,6 @@
 package com.Backend.Email.model.user;
+import com.Backend.Email.model.email.Email;
+import com.Backend.Email.services.userService;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,10 +17,10 @@ public class User implements Serializable {
     private String password;
 
     @ElementCollection
-    private ArrayList<Long> inbox;
+    private List<Long> inbox;
 
     @ElementCollection
-    private ArrayList<Long> sent;
+    private List<Long> sent;
 
     public String getPassword() {
         return password;
@@ -55,9 +57,28 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "User{" +
+                "email='" + email + '\'' +
                 ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", inbox=" + inbox +
+                ", sent=" + sent +
                 '}';
+    }
+
+
+    public int sendEmail(userService userService, Email email){
+        this.sent.add(email.getId());
+        userService.updateUser(this);
+        List<Long> notExist;
+        List<String> toWho = email.getToWho();
+        for(int i=0;i<toWho.size();i++){
+            User toWhom = userService.findUser(toWho.get(i));
+            if(toWhom != null) {
+                toWhom.inbox.add(email.getId());
+                userService.updateUser(toWhom);
+            }else
+                return i;
+        }
+        return 500;
     }
 }
