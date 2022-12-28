@@ -16,6 +16,7 @@ export class SentComponent implements OnInit {
   count: number = 0;
   tableSize: number = 11;
   sent: number[] | undefined = [];
+  reload: boolean | undefined = false;
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
@@ -27,7 +28,7 @@ export class SentComponent implements OnInit {
   }
 
   getPosts(){
-    if (this.cache.sent === undefined) {
+    if (this.cache.sent === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.sent = data.sent;
         this.service.getEmails(this.sent!, "sent", this.service.email!).subscribe((response: any) => {
@@ -39,6 +40,7 @@ export class SentComponent implements OnInit {
     else {
       this.EMAILS = this.cache.sent;
     }
+    this.reload = false;
   }
 
   onTableDataChange(event: any) {

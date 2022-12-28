@@ -1,14 +1,16 @@
 <app-home></app-home>
 <div class="email-container">
   <div class="tool-container">
-    <button class="tool-btn"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
+    <button class="tool-btn" (click)="reload=true; getPosts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
     <select class="tool-btn">
       <option value="dateOtoN">Newest to Oldest</option>
       <option value="dateNtoO">Oldest to Newest</option>
       <option value="sender">Sender (a-z)</option>
       <option value="subject">Subject (a-z)</option>
     </select>
+    <input class="tool-txt" type="text" placeholder="search">
   </div>
+
   <table>
     <tr style="background-color: #D9D9D9">
       <td>to</td>

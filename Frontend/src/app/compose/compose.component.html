@@ -6,9 +6,10 @@
       <table style="margin-bottom: 1%">
         <tr *ngFor="let receiver of receivers">
           <td style="border: none; text-align: left">{{receiver}}</td>
+          <td class="delete-btn" (click)="removeReceiver(receiver)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
         </tr>
       </table>
-      <input type="text" placeholder="To" class="text-box-compose" (keyup.enter)="appendReceiver()" [(ngModel)]="to" name="to" required>
+      <input type="text" placeholder="To" class="text-box-compose" (keyup.enter)="appendReceiver()" [(ngModel)]="to" name="to">
     </div>
     <div class="input-compose">
       <label>Subject</label>
@@ -20,8 +21,13 @@
       <textarea placeholder="body" class="text-area-compose" [(ngModel)]="body" name="body" #bodyInput="ngModel" required></textarea>
       <div class="error" *ngIf="bodyInput.invalid && bodyInput.touched">*this field is required</div>
     </div>
-    <button type="submit" class="send-btn" [disabled]="emailCompose.invalid">Send!</button>
+    <div style="text-align: right">
+      <button type="submit" class="send-btn" [disabled]="emailCompose.invalid || (receivers!.length == 0)">Send!</button>
+    </div>
   </form>
+  <div style="text-align: right; padding: 0 2% 2%;">
+  <button class="send-btn" (click)="saveDraft()">Save draft!</button>
+  </div>
   <div class="input-compose">
     <table style="margin-bottom: 1%">
       <tr *ngFor="let file of files">
