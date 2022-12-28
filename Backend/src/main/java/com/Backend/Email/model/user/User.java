@@ -34,6 +34,10 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public List<Long> getDeleted() {
+        return deleted;
+    }
+
     public User() {}
 
     public User(String name, String email, String password) {
