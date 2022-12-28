@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {User} from "./user";
+import {User} from "../../models/user/user";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Email} from "./email";
+import {Email} from "../../models/email/email";
 
 
 @Injectable({

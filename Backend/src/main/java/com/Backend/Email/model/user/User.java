@@ -114,10 +114,10 @@ public class User implements Serializable {
             return true;
         }
         return false;
+
     }
 
     public boolean removeFromDeleted(Long id){
         return this.deleted.remove(Long.valueOf(id));
     }
-
 }

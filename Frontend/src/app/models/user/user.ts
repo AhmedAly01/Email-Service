@@ -4,6 +4,7 @@ export class User {
   password: string | undefined;
   inbox: number[] | undefined;
   sent: number[] | undefined;
+  deleted: number[] | undefined;
 
 
   constructor(name?: string, email?: string, password?: string) {

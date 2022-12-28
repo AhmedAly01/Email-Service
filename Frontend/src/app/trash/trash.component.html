@@ -2,7 +2,8 @@
 <div class="email-container">
   <table>
     <tr style="background-color: #D9D9D9">
-      <td>to</td>
+      <td>from</td>
+      <td>To</td>
       <td>subject</td>
       <td>date</td>
     </tr>
@@ -13,14 +14,17 @@
                   totalItems: count
                 };
           let i = index">
+      <td>{{email.fromWho}}</td>
       <td>{{email.toWho}}</td>
       <td>{{email.subject}}</td>
       <td>{{email.date}}</td>
+      <td (click)="deleteEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
   <pagination-controls
     previousLabel="Prev"
     nextLabel="Next"
+    (pageChange)="onTableDataChange($event)"
   >
   </pagination-controls>
 </div>

@@ -1,6 +1,9 @@
-import { UserService } from './../user-service.service';
 import { Component, OnInit } from '@angular/core';
-import { User } from '../user';
+import {UserService} from "../service/user/user-service.service";
+import {User} from "../models/user/user";
+import {Email} from "../models/email/email";
+import {Router} from "@angular/router";
+import {AuthGuard} from "../guards/auth.guard";
 
 @Component({
   selector: 'app-trash',
@@ -8,14 +11,13 @@ import { User } from '../user';
   styleUrls: ['./trash.component.css']
 })
 export class TrashComponent implements OnInit {
-  
-  trash: number[] | undefined = [];
   EMAILS: any;
   page: number = 1;
   count: number = 0;
   tableSize: number = 11;
+  trash: number[] | undefined = [];
 
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard) { }
 
   ngOnInit(): void {
     this.getPosts();
