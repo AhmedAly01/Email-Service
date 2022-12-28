@@ -1,5 +1,5 @@
 export class Email {
-  private id: number | undefined;
+  id: number | undefined;
   private from: string | undefined;
   private to: string[] | undefined;
   subject: string | undefined;
@@ -22,7 +22,7 @@ export class Email {
 
 
   getId(): number {
-    return <number>this.id;
+    return this.id as number;
   }
 
   setId(value: number) {

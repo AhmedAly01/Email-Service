@@ -63,6 +63,9 @@ public class UserResource {
 
     @PostMapping("/email/compose/{draft}")
     public ResponseEntity sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws JsonProcessingException {
+
+        System.out.println(finishedEmail.toString());
+
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
 
