@@ -1,10 +1,9 @@
 package com.Backend.Email.model.user;
 import com.Backend.Email.model.email.Email;
-import com.Backend.Email.services.userService;
+import com.Backend.Email.services.UserService;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -82,17 +81,17 @@ public class User implements Serializable {
     }
 
 
-    public void sendEmail(userService userService, Email email){
+    public void sendEmail(UserService userService, Email email){
         this.sent.add(email.getId());
         email.addAlink();
-        userService.updateUser(this);
+        userService.saveUser(this);
         ArrayList<String> notExist = new ArrayList<>();
         List<String> toWho = email.getToWho();
         for(int i=0;i<toWho.size();i++){
             User toWhom = userService.findUser(toWho.get(i));
             if(toWhom != null) {
                 toWhom.inbox.add(email.getId());
-                userService.updateUser(toWhom);
+                userService.saveUser(toWhom);
                 email.addAlink();
             }else
                 notExist.add(toWho.get(i));
@@ -100,7 +99,7 @@ public class User implements Serializable {
         ///send a message to the inbox saying that the email doesn't exist /// to do
     }
 
-    public boolean deleteEmail(Long id, String folderName, userService userService){
+    public boolean deleteEmail(Long id, String folderName, UserService userService){
         boolean success = false;
         if(folderName.equals("inbox"))
             success = this.inbox.remove(Long.valueOf(id));
@@ -109,7 +108,7 @@ public class User implements Serializable {
         }
         if(success) {
             this.deleted.add(id);
-            userService.updateUser(this);
+            userService.saveUser(this);
             return true;
         }
         return false;

@@ -1,10 +1,7 @@
 package com.Backend.Email.model.email;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class EmailBuilder {
     Email email;

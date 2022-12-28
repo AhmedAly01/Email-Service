@@ -1,13 +1,10 @@
 package com.Backend.Email.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
-import com.Backend.Email.repo.EmailRepo;
 import com.Backend.Email.services.EmailService;
-import com.Backend.Email.services.userService;
+import com.Backend.Email.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -15,20 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @CrossOrigin
 @RequestMapping("/")
 @RestController
 public class UserResource {
-    private final userService userService;
+    private final UserService userService;
     private final EmailService emailService;
 
-    public UserResource(userService userService, EmailService emailService){
+    public UserResource(UserService userService, EmailService emailService){
         this.userService = userService;
         this.emailService = emailService;
     }
@@ -49,13 +43,13 @@ public class UserResource {
 
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user){
-        User newUser = userService.addUser(user);
+        User newUser = userService.saveUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/user/update")
     public ResponseEntity<User> updateUser(@RequestBody User user){
-        User updateUser = userService.updateUser(user);
+        User updateUser = userService.saveUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
@@ -119,7 +113,7 @@ public class UserResource {
                 }
             }
             if(user != null)
-                userService.updateUser(user);
+                userService.saveUser(user);
         }
         System.out.println(emails.toString());
         return new ResponseEntity<>(emails, HttpStatus.OK);
@@ -135,7 +129,7 @@ public class UserResource {
             if(currEmail.removeAlink() <= 0){
                 emailService.deleteEmail(currEmail.getId());
             }
-            userService.updateUser(user);
+            userService.saveUser(user);
         }else
             user.deleteEmail(id, folderName, userService);
         return new ResponseEntity<>(HttpStatus.OK);
