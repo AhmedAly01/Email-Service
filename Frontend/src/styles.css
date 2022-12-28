@@ -215,7 +215,7 @@ label{
   width: 75%;
   height: 90%;
   padding-top: 0;
-  text-align: right;
+  text-align: center;
   border: none;
   background-color: white;
   border-radius: 20px;
@@ -249,6 +249,14 @@ tr:hover{
 
 tr:active{
   background-color: #B9B9B9;
+}
+
+.delete-btn:hover{
+  background-color: rgba(46, 82, 196, 0.75);
+}
+
+.delete-btn:active{
+  background-color: rgba(46, 82, 196, 0.5);
 }
 
 .form-compose{
@@ -316,3 +324,27 @@ tr:active{
 .file-input {
   display: none;
 }
+
+.tool-container{
+  display: flex;
+  padding: 0.5%;
+  margin: 0.5%;
+}
+
+.tool-btn{
+  padding: 1%;
+  margin: 0.5%;
+  color: white;
+  background-color: rgba(46, 82, 196, 1);
+  border: 1px solid rgba(46, 82, 196, 1);
+  border-radius: 10px;
+}
+
+.tool-btn:hover{
+  background-color: rgba(46, 82, 196, 0.75);
+}
+
+.tool-btn:active{
+  background-color: rgba(46, 82, 196, 0.5);
+}
+

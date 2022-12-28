@@ -27,17 +27,17 @@ export class InboxComponent implements OnInit {
   }
 
   getPosts(){
-    if (this.cache.inbox === null) {
+    if (this.cache.inbox === undefined) {
       this.service.user!.subscribe((data: User) => {
         this.inbox = data.inbox;
-        this.cache.inbox = this.inbox
         this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) => {
           this.EMAILS = response;
+          this.cache.inbox = this.EMAILS;
         });
       });
     }
     else {
-      this.inbox = this.cache.inbox;
+      this.EMAILS = this.cache.inbox;
     }
   }
 
