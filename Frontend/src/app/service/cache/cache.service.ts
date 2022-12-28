@@ -7,6 +7,7 @@ export class CacheService {
   inbox: any;
   sent: any;
   trash: any;
+  draft: any;
 
   constructor() { }
 }

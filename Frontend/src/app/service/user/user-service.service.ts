@@ -22,7 +22,6 @@ export class UserService {
     this.user = this.http.get<User>("http://localhost:8080/user/find/" + email);
     this.email = email;
     return this.user
-
   }
 
   sendEmail(email: Email){
@@ -38,7 +37,6 @@ export class UserService {
   }
 
   saveDraft(email: Email){
-    //here we post request to save the draft
     return this.http.post<Email>("http://localhost:8080/email/compose", email);
   }
 

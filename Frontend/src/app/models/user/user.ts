@@ -5,6 +5,7 @@ export class User {
   inbox: number[] | undefined;
   sent: number[] | undefined;
   deleted: number[] | undefined;
+  draft: number[] | undefined;
 
 
   constructor(name?: string, email?: string, password?: string) {
@@ -27,10 +28,6 @@ export class User {
 
   setEmail(value: string) {
     this.email = value;
-  }
-
-  getPassword(): string {
-    return <string>this.password;
   }
 
   setPassword(value: string) {
