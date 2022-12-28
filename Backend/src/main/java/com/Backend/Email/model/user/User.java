@@ -92,8 +92,6 @@ public class User implements Serializable {
         else if (folderName.equals("sent")) {
             this.sent.remove(Long.valueOf(id));
         }
-
-
         this.deleted.add(id);
     }
 
@@ -104,4 +102,9 @@ public class User implements Serializable {
     public List<Long> getInbox() {
         return inbox;
     }
+
+    public List<Long> getDeleted() {
+        return deleted;
+    }
+
 }

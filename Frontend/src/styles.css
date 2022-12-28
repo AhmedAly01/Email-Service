@@ -14,6 +14,7 @@ a{
 body{
   background-image: url("assets/img/wallpaper1.jpg");
   background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 .header {
@@ -23,6 +24,33 @@ body{
   background-color: white;
   border-radius: 20px;
   margin: 0;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translate(-50%, -40%);
+  }
+  100% {
+    transform: translate(-50%, -60%)
+  }
+}
+
+@keyframes slideInL {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInR {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .header-title{
@@ -55,6 +83,7 @@ body{
   box-shadow: 0 0 20px #454545;
   border: none;
   border-radius: 20px;
+  animation: slideUp 0.4s ease-in-out forwards;
 }
 
 .title{
@@ -143,6 +172,8 @@ label{
   text-align: center;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
+  animation: slideInL 0.1s ease-in-out forwards;
+
 }
 
 .search-bar{
@@ -189,6 +220,7 @@ label{
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 0 20px #454545;
+  animation: slideInR 0.2s ease-in-out forwards;
 }
 table{
   width: 100%;

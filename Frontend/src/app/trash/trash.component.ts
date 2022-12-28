@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import {UserService} from "../service/user/user-service.service";
+import {User} from "../models/user/user";
+import {Email} from "../models/email/email";
+import {Router} from "@angular/router";
+import {AuthGuard} from "../guards/auth.guard";
 
 @Component({
   selector: 'app-trash',
@@ -6,29 +11,36 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./trash.component.css']
 })
 export class TrashComponent implements OnInit {
-  emails = [
-    {id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},
-    {id: 4, name:'Flash', date:'20:00'}
-  ];
+  EMAILS: any;
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 11;
+  deleted: number[] | undefined = [];
 
-  constructor() { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard) { }
 
   ngOnInit(): void {
+    if (!this.authGuard.isSignedIn) {
+      this.router.navigateByUrl('').then();
+    }
+    this.getPosts();
   }
 
+  getPosts(){
+    this.service.user!.subscribe((data: User) => {
+      this.deleted = data.deleted;
+      this.service.getEmails(this.deleted!).subscribe((response: any) =>{
+        this.EMAILS = response;
+      });
+    });
+  }
+
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getPosts();
+  }
+
+  deleteEmail(email : Email) {
+    console.log("Deletion from trash logic put here");
+  }
 }

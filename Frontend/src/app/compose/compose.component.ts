@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Email} from "../email";
-import {UserService} from "../user-service.service";
+import {Email} from "../models/email/email";
+import {UserService} from "../service/user/user-service.service";
 import {HttpClient} from "@angular/common/http";
 
 @Component({
@@ -20,7 +20,7 @@ export class ComposeComponent implements OnInit {
   fileName: string = '';
   files: string[] | undefined = [];
 
-  constructor(private service: UserService, private http: HttpClient) { }
+  constructor(private service: UserService) { }
 
   ngOnInit(): void {}
 

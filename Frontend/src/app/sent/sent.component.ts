@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../user-service.service";
-import {User} from "../user";
+import {UserService} from "../service/user/user-service.service";
+import {User} from "../models/user/user";
+import {Router} from "@angular/router";
+import {AuthGuard} from "../guards/auth.guard";
 
 @Component({
   selector: 'app-sent',
@@ -14,14 +16,17 @@ export class SentComponent implements OnInit {
   tableSize: number = 11;
   sent: number[] | undefined = [];
 
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard) { }
 
   ngOnInit(): void {
+    if (!this.authGuard.isSignedIn) {
+      this.router.navigateByUrl('').then();
+    }
     this.getPosts();
   }
 
   getPosts(){
-    this.service.findUser(this.service.email).subscribe((data: User) => {
+    this.service.user!.subscribe((data: User) => {
       this.sent = data.sent;
       console.log(this.sent);
       this.service.getEmails(this.sent!).subscribe((response: any) =>{
