@@ -1,21 +1,21 @@
 package com.Backend.Email.services;
 
 import com.Backend.Email.model.user.User;
-import com.Backend.Email.repo.userRepo;
+import com.Backend.Email.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class userService {
-    private final userRepo userRepo;
+public class UserService {
+    private final UserRepo userRepo;
 
     @Autowired
-    public userService(userRepo userRepo) {
+    public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
 
-    public User addUser(User user){
+    public User saveUser(User user){
         return userRepo.save(user);
     }
 
@@ -23,9 +23,6 @@ public class userService {
         return userRepo.findAll();
     }
 
-    public User updateUser(User user){
-        return userRepo.save(user);
-    }
 
     public User findUser(String email) {
         return userRepo.findUserByEmail(email)

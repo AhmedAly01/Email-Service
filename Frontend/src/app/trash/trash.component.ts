@@ -47,6 +47,8 @@ export class TrashComponent implements OnInit {
   }
 
   deleteEmail(email: any) {
-    console.log(email);
+    console.log(this.EMAILS.indexOf(email));
+    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
+    this.service.deleteEmails(this.service.email, email.id, "trash").subscribe();
   }
 }

@@ -1,13 +1,10 @@
 package com.Backend.Email.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
-import com.Backend.Email.repo.EmailRepo;
 import com.Backend.Email.services.EmailService;
-import com.Backend.Email.services.userService;
+import com.Backend.Email.services.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -15,20 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 
 @CrossOrigin
 @RequestMapping("/")
 @RestController
 public class UserResource {
-    private final userService userService;
+    private final UserService userService;
     private final EmailService emailService;
 
-    public UserResource(userService userService, EmailService emailService){
+    public UserResource(UserService userService, EmailService emailService){
         this.userService = userService;
         this.emailService = emailService;
     }
@@ -49,13 +43,13 @@ public class UserResource {
 
     @PostMapping("/user/add")
     public ResponseEntity<User> addUser(@RequestBody User user){
-        User newUser = userService.addUser(user);
+        User newUser = userService.saveUser(user);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/user/update")
     public ResponseEntity<User> updateUser(@RequestBody User user){
-        User updateUser = userService.updateUser(user);
+        User updateUser = userService.saveUser(user);
         return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
@@ -72,27 +66,33 @@ public class UserResource {
 
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
-        emailBuilder.setFrom(res.get("from").toString());
-        emailBuilder.setTo(new ArrayList<String>((Collection<? extends String>)(res.get("to"))));
-        emailBuilder.setSubject(res.get("subject").toString());
-        emailBuilder.setBody(res.get("body").toString());
-        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
-        emailBuilder.setDate(LocalDateTime.now());
-        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
-//        emailBuilder.setAttachments();
-        User user = userService.findUser(res.get("from").toString());
 
+        boolean finished = true;
+
+        finished = emailBuilder.setFrom(res.get("from")) && finished;
+        finished = emailBuilder.setTo((res.get("to"))) && finished;
+        finished = emailBuilder.setSubject(res.get("subject")) && finished;
+        finished = emailBuilder.setBody(res.get("body")) && finished;
+
+        emailBuilder.setId(res.get("id"));
+
+        User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
-        System.out.println(email.toString());
+        if(finished) {
+            emailBuilder.setPriority(res.get("priority"));
+            emailBuilder.setDate(LocalDateTime.now());
+            //        emailBuilder.setAttachments();
+            List<Integer> notExist = null;
 
-        List<Integer> notExist = null;
-
-        if(user != null) {
-            System.out.println(email.toString());
-            user.sendEmail(userService, email);
+            if (user != null) {
+                user.sendEmail(userService, email);
+            }
+        }else{
+            user.addToDraft(email.getId(), userService);
+            email.setLinks(1);
         }
-
+        emailService.addEmail(email);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -101,7 +101,6 @@ public class UserResource {
     public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids, @PathVariable String folderName, @PathVariable String email){
         List<Email> emails = emailService.findEmails(ids);
         if(folderName.equals("trash")){
-
             LocalDateTime currDateTime = LocalDateTime.now().minusDays(30);
             User user = null;
             for(int i=0;i<emails.size();i++){
@@ -110,9 +109,8 @@ public class UserResource {
                     if(user == null){
                         user = userService.findUser(email);
                     }
-                    if(user.removeFromDeleted(currEmail.getId())) {
-                        userService.updateUser(user);
-                    }
+                    user.removeFromDeleted(currEmail.getId());
+
                     emails.remove(currEmail);
                     if(currEmail.removeAlink() <= 0){
                         emailService.deleteEmail(currEmail.getId());
@@ -120,7 +118,7 @@ public class UserResource {
                 }
             }
             if(user != null)
-                userService.updateUser(user);
+                userService.saveUser(user);
         }
         System.out.println(emails.toString());
         return new ResponseEntity<>(emails, HttpStatus.OK);
@@ -128,13 +126,24 @@ public class UserResource {
 
     @DeleteMapping("/email/delete/{email}/{id}/{folderName}")
     @Transactional
-    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("folderName") String folderName){
+    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("folderName") String folderName) {
         User user = userService.findUser(email);
-        user.deleteEmail(id, folderName, userService);
+        if (folderName.equals("trash")){
+            user.removeFromDeleted(id);
+            Email currEmail = emailService.findEmail(id);
+            if(currEmail.removeAlink() <= 0){
+                emailService.deleteEmail(currEmail.getId());
+            }
+            userService.saveUser(user);
+        }else
+            user.deleteEmail(id, folderName, userService);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @GetMapping("/email/getAll")
+    public ResponseEntity<List<Email>> getAllEmails(){
+        return new ResponseEntity<>(emailService.getAll(), HttpStatus.OK);
+    }
 
 
 }
