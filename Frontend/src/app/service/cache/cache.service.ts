@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CacheService {
-  private inbox: any;
-  private sent: any;
-  private trash: any;
+  inbox: any;
+  sent: any;
+  trash: any;
 
   constructor() { }
 }

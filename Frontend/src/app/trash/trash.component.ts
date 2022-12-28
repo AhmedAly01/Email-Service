@@ -24,15 +24,23 @@ export class TrashComponent implements OnInit {
   }
 
   getPosts(){
-    this.service.findUser(this.service.email).subscribe((data: User) => {
+    this.service.user!.subscribe((data: User) => {
       this.trash = data.sent;
       console.log(this.trash);
       this.service.getEmails(this.trash!, "trash", this.service.email!).subscribe((response: any) =>{
         this.EMAILS = response;
         console.log(response);
-        
+
       });
     });
   }
 
+  onTableDataChange(event: any) {
+    this.page = event;
+    this.getPosts();
+  }
+
+  deleteEmail(email: any) {
+    console.log(email);
+  }
 }

@@ -3,6 +3,7 @@ import {UserService} from "../service/user/user-service.service";
 import {User} from "../models/user/user";
 import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
+import {CacheService} from "../service/cache/cache.service";
 
 @Component({
   selector: 'app-inbox',
@@ -16,7 +17,7 @@ export class InboxComponent implements OnInit {
   tableSize: number = 11;
   inbox: number[] | undefined = [];
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -26,12 +27,18 @@ export class InboxComponent implements OnInit {
   }
 
   getPosts(){
-    this.service.user!.subscribe((data: User) => {
-      this.inbox = data.inbox;
-      this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) =>{
-        this.EMAILS = response;
+    if (this.cache.inbox === null) {
+      this.service.user!.subscribe((data: User) => {
+        this.inbox = data.inbox;
+        this.cache.inbox = this.inbox
+        this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) => {
+          this.EMAILS = response;
+        });
       });
-    });
+    }
+    else {
+      this.inbox = this.cache.inbox;
+    }
   }
 
   onTableDataChange(event: any) {
