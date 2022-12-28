@@ -16,6 +16,7 @@ export class InboxComponent implements OnInit {
   count: number = 0;
   tableSize: number = 11;
   inbox: number[] | undefined = [];
+  reload: boolean | undefined = false;
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
@@ -27,7 +28,7 @@ export class InboxComponent implements OnInit {
   }
 
   getPosts(){
-    if (this.cache.inbox === undefined) {
+    if (this.cache.inbox === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.inbox = data.inbox;
         this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) => {
@@ -39,6 +40,7 @@ export class InboxComponent implements OnInit {
     else {
       this.EMAILS = this.cache.inbox;
     }
+    this.reload = false;
   }
 
   onTableDataChange(event: any) {
@@ -50,4 +52,5 @@ export class InboxComponent implements OnInit {
     this.EMAILS.splice(this.EMAILS.indexOf(email),1);
     this.service.deleteEmails(this.service.email, email.id, "inbox").subscribe();
   }
+
 }

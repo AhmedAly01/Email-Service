@@ -17,6 +17,7 @@ export class TrashComponent implements OnInit {
   count: number = 0;
   tableSize: number = 11;
   trash: number[] | undefined = [];
+  reload: boolean | undefined;
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
@@ -25,7 +26,7 @@ export class TrashComponent implements OnInit {
   }
 
   getPosts(){
-    if (this.cache.trash === undefined) {
+    if (this.cache.trash === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.trash = data.deleted;
         this.service.getEmails(this.trash!, "trash", this.service.email!).subscribe((response: any) => {
@@ -37,6 +38,7 @@ export class TrashComponent implements OnInit {
     else {
       this.EMAILS = this.cache.trash;
     }
+    this.reload = false;
   }
 
   onTableDataChange(event: any) {

@@ -37,4 +37,9 @@ export class UserService {
     return this.http.delete("http://localhost:8080/email/delete/" + user + "/" +  id + "/" + folderName);
   }
 
+  saveDraft(email: Email){
+    //here we post request to save the draft
+    return this.http.post<Email>("http://localhost:8080/email/compose", email);
+  }
+
 }
