@@ -2,6 +2,7 @@ package com.Backend.Email.model.email;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class EmailBuilder {
     Email email;
@@ -11,36 +12,65 @@ public class EmailBuilder {
         this.email = new Email();
     }
 
-    public  void setFrom(String from){
-        this.email.setFrom(from);
+    public boolean setFrom(Object from){
+        if(from == null)
+            return false;
+        this.email.setFromWho(from.toString());
+        return true;
     }
 
-    public void setSubject(String subject) {
-        this.email.setSubject(subject);
+    public boolean setSubject(Object subject) {
+        if(subject == null)
+            return false;
+        this.email.setSubject(subject.toString());
+        return true;
     }
 
-    public void setDate(LocalDateTime date) {
+    public boolean setDate(LocalDateTime date) {
+        if(date == null)
+            return false;
         this.email.setDate(date);
+        return true;
     }
 
-    public void setBody(String body) {
-        this.email.setBody(body);
+    public boolean setBody(Object body) {
+        System.out.println(body.toString());
+        if(body == null)
+            return false;
+        this.email.setBody(body.toString());
+        return true;
     }
 
-    public void setAttachments(byte[] attachments) {
+    public boolean setAttachments(byte[] attachments) {
+        if(attachments == null)
+            return false;
         this.email.setAttachments(attachments);
+        return true;
     }
 
     public void setRead(boolean read) {
-        this.email.setRead(read);
+        this.email.setSeen(read);
     }
 
-    public void setPriority(Integer priority) {
-        this.email.setPriority(priority);
+    public boolean setPriority(Object priority) {
+        if(priority == null)
+            return false;
+        this.email.setImportance(Integer.valueOf(priority.toString()));
+        return true;
     }
 
-    public void setTo(ArrayList<String> to) {
-        this.email.setTo(to);
+    public boolean setTo(Object to) {
+        if(to == null)
+            return false;
+        this.email.setToWho(new ArrayList<String>((Collection<? extends String>)(to)));
+        return true;
+    }
+
+    public boolean setId(Object id){
+        if(id == null)
+            return false;
+        this.email.setId(Long.valueOf(id.toString()));
+        return true;
     }
 
     public Email getEmail(){

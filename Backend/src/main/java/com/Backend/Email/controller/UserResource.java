@@ -66,28 +66,33 @@ public class UserResource {
 
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
-        emailBuilder.setFrom(res.get("from").toString());
-        emailBuilder.setTo(new ArrayList<String>((Collection<? extends String>)(res.get("to"))));
-        emailBuilder.setSubject(res.get("subject").toString());
-        emailBuilder.setBody(res.get("body").toString());
-        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
-        emailBuilder.setDate(LocalDateTime.now());
-        emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
-//        emailBuilder.setAttachments();
-        User user = userService.findUser(res.get("from").toString());
 
+        boolean finished = true;
+
+        finished = emailBuilder.setFrom(res.get("from")) && finished;
+        finished = emailBuilder.setTo((res.get("to"))) && finished;
+        finished = emailBuilder.setSubject(res.get("subject")) && finished;
+        finished = emailBuilder.setBody(res.get("body")) && finished;
+
+        emailBuilder.setId(res.get("id"));
+
+        User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
-        System.out.println(email.toString());
+        if(finished) {
+            emailBuilder.setPriority(res.get("priority"));
+            emailBuilder.setDate(LocalDateTime.now());
+            //        emailBuilder.setAttachments();
+            List<Integer> notExist = null;
 
-        List<Integer> notExist = null;
-
-        if(user != null) {
-            System.out.println(email.toString());
-            user.sendEmail(userService, email);
-            emailService.addEmail(email);
+            if (user != null) {
+                user.sendEmail(userService, email);
+            }
+        }else{
+            user.addToDraft(email.getId(), userService);
+            email.setLinks(1);
         }
-
+        emailService.addEmail(email);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

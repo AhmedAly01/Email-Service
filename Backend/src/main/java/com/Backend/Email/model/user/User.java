@@ -23,6 +23,9 @@ public class User implements Serializable {
     private List<Long> sent;
 
     @ElementCollection
+    private List<Long> draft;
+
+    @ElementCollection
     private List<Long> deleted;
 
     public String getPassword() {
@@ -61,6 +64,10 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public List<Long> getDraft() {
+        return draft;
+    }
+
     public List<Long> getSent() {
         return sent;
     }
@@ -77,11 +84,16 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", inbox=" + inbox +
                 ", sent=" + sent +
+                ", draft=" + draft +
+                ", deleted=" + deleted +
                 '}';
     }
 
-
     public void sendEmail(UserService userService, Email email){
+        email.setLinks(0);
+        if(email.getId() != null){
+            this.draft.remove(Long.valueOf(email.getId()));
+        }
         this.sent.add(email.getId());
         email.addAlink();
         userService.saveUser(this);
@@ -99,13 +111,21 @@ public class User implements Serializable {
         ///send a message to the inbox saying that the email doesn't exist /// to do
     }
 
+    public void addToDraft(Long id, UserService userService){
+        this.draft.add(id);
+        userService.saveUser(this);
+    }
+
     public boolean deleteEmail(Long id, String folderName, UserService userService){
         boolean success = false;
         if(folderName.equals("inbox"))
             success = this.inbox.remove(Long.valueOf(id));
         else if (folderName.equals("sent")) {
             success = this.sent.remove(Long.valueOf(id));
+        } else if (folderName.equals("draft")) {
+            success = this.draft.remove(Long.valueOf(id));
         }
+
         if(success) {
             this.deleted.add(id);
             userService.saveUser(this);

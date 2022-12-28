@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -36,40 +37,16 @@ public class Email implements Serializable {
         this.links = 0;
     }
 
-    public void setFrom(String from) {
-        this.fromWho = from;
-    }
-
-    public void setTo(ArrayList<String> to) {
-        this.toWho = to;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public void setAttachments(byte[] attachments) {
-        this.attachments = attachments;
-    }
-
-    public void setRead(boolean read) {
-        this.seen = read;
-    }
-
-    public void setPriority(Integer priority) {
-        this.importance = priority;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public String getFromWho() {
+        return fromWho;
+    }
+
+    public List<String> getToWho() {
+        return toWho;
     }
 
     public String getSubject() {
@@ -96,12 +73,48 @@ public class Email implements Serializable {
         return importance;
     }
 
-    public String getFromWho() {
-        return fromWho;
+    public Integer getLinks() {
+        return links;
     }
 
-    public List<String> getToWho() {
-        return toWho;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFromWho(String fromWho) {
+        this.fromWho = fromWho;
+    }
+
+    public void setToWho(List<String> toWho) {
+        this.toWho = toWho;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setAttachments(byte[] attachments) {
+        this.attachments = attachments;
+    }
+
+    public void setSeen(boolean seen) {
+        this.seen = seen;
+    }
+
+    public void setImportance(Integer importance) {
+        this.importance = importance;
+    }
+
+    public void setLinks(Integer links) {
+        this.links = links;
     }
 
     public Integer removeAlink(){
@@ -114,7 +127,19 @@ public class Email implements Serializable {
         return links;
     }
 
-    public Integer getLinks() {
-        return links;
+    @Override
+    public String toString() {
+        return "Email{" +
+                "id=" + id +
+                ", fromWho='" + fromWho + '\'' +
+                ", toWho=" + toWho +
+                ", subject='" + subject + '\'' +
+                ", date=" + date +
+                ", body='" + body + '\'' +
+                ", attachments=" + Arrays.toString(attachments) +
+                ", seen=" + seen +
+                ", importance=" + importance +
+                ", links=" + links +
+                '}';
     }
 }
