@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Email} from "../models/email/email";
 import {UserService} from "../service/user/user-service.service";
+import {EmailService} from "../service/email/email.service";
 
 @Component({
   selector: 'app-compose',
@@ -19,9 +20,13 @@ export class ComposeComponent implements OnInit {
   fileName: string = '';
   files: string[] | undefined = [];
 
-  constructor(private service: UserService) { }
+  constructor(private service: UserService, private emailService: EmailService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.receivers = this.emailService.to;
+    this.body = this.emailService.body;
+    this.subject = this.emailService.subject;
+  }
 
   onFileSelected(event : any) {
 

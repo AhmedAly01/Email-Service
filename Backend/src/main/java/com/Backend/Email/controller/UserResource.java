@@ -72,15 +72,14 @@ public class UserResource {
         finished = emailBuilder.setTo((res.get("to"))) && finished;
         finished = emailBuilder.setSubject(res.get("subject")) && finished;
         finished = emailBuilder.setBody(res.get("body")) && finished;
-
+        emailBuilder.setPriority(res.get("priority"));
+        emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setId(res.get("id"));
 
         User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
         if(finished && !draft) {
-            emailBuilder.setPriority(res.get("priority"));
-            emailBuilder.setDate(LocalDateTime.now());
             //        emailBuilder.setAttachments();
             List<Integer> notExist = null;
 
@@ -91,6 +90,7 @@ public class UserResource {
             user.addToDraft(email.getId(), userService);
             email.setLinks(1);
         }
+
         emailService.addEmail(email);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

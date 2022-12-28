@@ -4,6 +4,8 @@ import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
 import {User} from "../models/user/user";
+import {EmailService} from "../service/email/email.service";
+import {Email} from "../models/email/email";
 
 @Component({
   selector: 'app-draft',
@@ -18,7 +20,7 @@ export class DraftComponent implements OnInit {
   draft: number[] | undefined = [];
   reload: boolean | undefined = false;
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -29,9 +31,9 @@ export class DraftComponent implements OnInit {
 
   getPosts(){
     if (this.cache.draft === undefined || this.reload) {
-      this.service.user!.subscribe((data: User) => {
+      this.userService.user!.subscribe((data: User) => {
         this.draft = data.draft;
-        this.service.getEmails(this.draft!, "draft", this.service.email!).subscribe((response: any) => {
+        this.userService.getEmails(this.draft!, "draft", this.userService.email!).subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.draft = this.EMAILS;
         });
@@ -50,6 +52,13 @@ export class DraftComponent implements OnInit {
 
   deleteEmail(email: any) {
     this.EMAILS.splice(this.EMAILS.indexOf(email),1);
-    this.service.deleteEmails(this.service.email, email.id, "draft").subscribe();
+    this.userService.deleteEmails(this.userService.email, email.id, "draft").subscribe();
+  }
+
+  openDraft(email: Email) {
+    this.emailService.to = email.toWho;
+    this.emailService.body = email.body;
+    this.emailService.subject = email.subject;
+    this.router.navigateByUrl('home/compose');
   }
 }

@@ -2,11 +2,12 @@ export class Email {
   private id: number | undefined;
   private from: string | undefined;
   private to: string[] | undefined;
-  private subject: string | undefined;
+  subject: string | undefined;
   private date: object | undefined;
-  private body: string | undefined;
+  body: string | undefined;
   private attachments: object[] | undefined;
   private priority: number | undefined;
+  toWho: any;
 
 
   constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: object[], priority?: number) {
