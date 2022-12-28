@@ -21,9 +21,13 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
-  margin: 0;
+  margin: 1%;
 }
 
 @keyframes slideUp {
@@ -76,7 +80,7 @@ body{
   top: 60%;
   left: 50%;
   transform: translate(-50%, -60%);
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   justify-content: center;
   text-align: center;
   vertical-align: middle;
@@ -148,18 +152,18 @@ label{
 
 .create{
   padding: 3%;
-  background-color: white;
+  background-color: transparent;
   color: #2e52c4;
   border: none;
   border-radius: 10px;
 }
 
 .create:hover{
-  background-color: #D9D9D9;
+  background-color: rgba(217, 217, 217, 0.5);
 }
 
 .create:active{
-  background-color: #B9B9B9;
+  background-color: rgba(185, 185, 185, 0.5);
 }
 
 .side-bar{
@@ -176,15 +180,6 @@ label{
 
 }
 
-.search-bar{
-  width: 88%;
-  aspect-ratio: 8;
-  margin: 3%;
-  background-color: white;
-  border: none;
-  border-radius: 10px;
-}
-
 .folder-btn{
   width: 90%;
   aspect-ratio: 5.5;
@@ -196,11 +191,11 @@ label{
 }
 
 .folder-btn:hover{
-  background-color: #B9B9B9;
+  background-color: rgba(185, 185, 185, 0.5);
 }
 
 .folder-btn:active{
-  background-color: #999999;
+  background-color: rgba(153, 153, 153, 0.5);
 }
 
 .folder-btn > img,
@@ -213,11 +208,10 @@ label{
   left: 18%;
   top: 5%;
   width: 75%;
-  height: 90%;
-  padding-top: 0;
+  padding: 1%;
   text-align: center;
   border: none;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 20px;
   box-shadow: 0 0 20px #454545;
   animation: slideInR 0.2s ease-in-out forwards;
