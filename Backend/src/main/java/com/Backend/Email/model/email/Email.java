@@ -114,5 +114,7 @@ public class Email implements Serializable {
         return links;
     }
 
-
+    public Integer getLinks() {
+        return links;
+    }
 }

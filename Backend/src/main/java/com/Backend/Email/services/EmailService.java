@@ -39,4 +39,10 @@ public class EmailService {
         emailRepo.deleteById(id);
     }
 
+
+    public List<Email> getAll(){
+        return emailRepo.findAll();
+    }
+
+
 }

@@ -107,7 +107,6 @@ public class User implements Serializable {
         else if (folderName.equals("sent")) {
             success = this.sent.remove(Long.valueOf(id));
         }
-
         if(success) {
             this.deleted.add(id);
             userService.updateUser(this);

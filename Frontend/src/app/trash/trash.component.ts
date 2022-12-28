@@ -25,7 +25,7 @@ export class TrashComponent implements OnInit {
 
   getPosts(){
     this.service.user!.subscribe((data: User) => {
-      this.trash = data.sent;
+      this.trash = data.deleted;
       console.log(this.trash);
       this.service.getEmails(this.trash!, "trash", this.service.email!).subscribe((response: any) =>{
         this.EMAILS = response;
@@ -41,6 +41,8 @@ export class TrashComponent implements OnInit {
   }
 
   deleteEmail(email: any) {
-    console.log(email);
+    console.log(this.EMAILS.indexOf(email));
+    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
+    this.service.deleteEmails(this.service.email, email.id, "trash").subscribe();
   }
 }
