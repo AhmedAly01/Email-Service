@@ -34,7 +34,6 @@ public class EmailBuilder {
     }
 
     public boolean setBody(Object body) {
-        System.out.println(body.toString());
         if(body == null)
             return false;
         this.email.setBody(body.toString());

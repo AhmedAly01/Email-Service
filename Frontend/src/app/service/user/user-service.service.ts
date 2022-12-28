@@ -25,7 +25,7 @@ export class UserService {
   }
 
   sendEmail(email: Email){
-    return this.http.post<Email>("http://localhost:8080/email/compose", email);
+    return this.http.post<Email>("http://localhost:8080/email/compose/" + false, email);
   }
 
   getEmails(ids: number[], folderName: string, email: string){
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   saveDraft(email: Email){
-    return this.http.post<Email>("http://localhost:8080/email/compose", email);
+    return this.http.post<Email>("http://localhost:8080/email/compose/" + true, email);
   }
 
 }
