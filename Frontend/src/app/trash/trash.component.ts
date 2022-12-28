@@ -1,4 +1,6 @@
+import { UserService } from './../user-service.service';
 import { Component, OnInit } from '@angular/core';
+import { User } from '../user';
 
 @Component({
   selector: 'app-trash',
@@ -6,29 +8,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./trash.component.css']
 })
 export class TrashComponent implements OnInit {
-  emails = [
-    {id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},{id: 1, name:'Superman', date:'15:00'},
-    {id: 2, name:'Batman', date:'18:00'},
-    {id: 5, name:'BatGirl', date:'19:00'},
-    {id: 3, name:'Robin', date:'23:00'},
-    {id: 4, name:'Flash', date:'20:00'}
-  ];
+  
+  trash: number[] | undefined = [];
+  EMAILS: any;
+  page: number = 1;
+  count: number = 0;
+  tableSize: number = 11;
 
-  constructor() { }
+  constructor(private service: UserService) { }
 
   ngOnInit(): void {
+    this.getPosts();
+  }
+
+  getPosts(){
+    this.service.findUser(this.service.email).subscribe((data: User) => {
+      this.trash = data.sent;
+      console.log(this.trash);
+      this.service.getEmails(this.trash!, "trash", this.service.email!).subscribe((response: any) =>{
+        this.EMAILS = response;
+        console.log(response);
+        
+      });
+    });
   }
 
 }

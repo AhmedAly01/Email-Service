@@ -29,8 +29,8 @@ export class UserService {
     return this.http.post<Email>("http://localhost:8080/email/compose", email);
   }
 
-  getEmails(ids: number[]){
-    return this.http.get("http://localhost:8080/email/getEmails/" + ids);
+  getEmails(ids: number[], folderName: string, email: string){
+    return this.http.get("http://localhost:8080/email/getEmails/" + email + "/" + folderName + "/" + ids);
   }
 
   deleteEmails(user: string | undefined, id: number, folderName: string){

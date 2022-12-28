@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,14 +22,19 @@ public class Email implements Serializable {
     @ElementCollection
     private List<String> toWho;
     private String subject;
-    private Date date;//////
+    private LocalDateTime date;//////
     private String body;
-
     @Lob
     @Column(name="file", columnDefinition = "BLOB")
     private byte[] attachments; /////// Turn the object to string and save cuz sql retarted
     private boolean seen;//////
     private Integer importance;///////
+
+    private Integer links;
+
+    public Email() {
+        this.links = 0;
+    }
 
     public void setFrom(String from) {
         this.fromWho = from;
@@ -42,7 +48,7 @@ public class Email implements Serializable {
         this.subject = subject;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -70,7 +76,7 @@ public class Email implements Serializable {
         return subject;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -97,4 +103,16 @@ public class Email implements Serializable {
     public List<String> getToWho() {
         return toWho;
     }
+
+    public Integer removeAlink(){
+        links = links - 1;
+        return links;
+    }
+
+    public Integer addAlink(){
+        links = links + 1;
+        return links;
+    }
+
+
 }

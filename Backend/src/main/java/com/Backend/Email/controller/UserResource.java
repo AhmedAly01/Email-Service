@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @CrossOrigin
@@ -74,13 +77,12 @@ public class UserResource {
         emailBuilder.setSubject(res.get("subject").toString());
         emailBuilder.setBody(res.get("body").toString());
         emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
-        emailBuilder.setDate(new Date());
+        emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setPriority(Integer.valueOf(res.get("priority").toString()));
 //        emailBuilder.setAttachments();
         User user = userService.findUser(res.get("from").toString());
 
         Email email = emailService.addEmail(emailBuilder.getEmail());
-
 
         System.out.println(email.toString());
 
@@ -95,9 +97,31 @@ public class UserResource {
     }
 
 
-    @GetMapping("/email/getEmails/{ids}")
-    public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids){
+    @GetMapping("/email/getEmails/{email}/{folderName}/{ids}")
+    public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids, @PathVariable String folderName, @PathVariable String email){
         List<Email> emails = emailService.findEmails(ids);
+        if(folderName.equals("trash")){
+
+            LocalDateTime currDateTime = LocalDateTime.now().minusDays(30);
+            User user = null;
+            for(int i=0;i<emails.size();i++){
+                Email currEmail = emails.get(i);
+                if(currEmail.getDate().isBefore(currDateTime)){
+                    if(user == null){
+                        user = userService.findUser(email);
+                    }
+                    if(user.removeFromDeleted(currEmail.getId())) {
+                        userService.updateUser(user);
+                    }
+                    emails.remove(currEmail);
+                    if(currEmail.removeAlink() <= 0){
+                        emailService.deleteEmail(currEmail.getId());
+                    }
+                }
+            }
+            if(user != null)
+                userService.updateUser(user);
+        }
         System.out.println(emails.toString());
         return new ResponseEntity<>(emails, HttpStatus.OK);
     }
@@ -106,9 +130,11 @@ public class UserResource {
     @Transactional
     public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("folderName") String folderName){
         User user = userService.findUser(email);
-        user.deleteEmail(id, folderName);
+        user.deleteEmail(id, folderName, userService);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 
 }

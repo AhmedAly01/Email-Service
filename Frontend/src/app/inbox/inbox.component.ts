@@ -17,13 +17,16 @@ export class InboxComponent implements OnInit {
   constructor(private service: UserService) { }
 
   ngOnInit(): void {
+    console.log("hello world from inbox");
+    //// store the emails you got so as not to have to load them multiple times
+
     this.getPosts();
   }
 
   getPosts(){
     this.service.findUser(this.service.email).subscribe((data: User) => {
       this.inbox = data.inbox;
-      this.service.getEmails(this.inbox!).subscribe((response: any) =>{
+      this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) =>{
         this.EMAILS = response;
       });
     });
