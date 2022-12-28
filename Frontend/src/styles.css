@@ -215,17 +215,28 @@ label{
   width: 75%;
   height: 90%;
   padding-top: 0;
-  text-align: right;
+  text-align: center;
   border: none;
   background-color: white;
   border-radius: 20px;
   box-shadow: 0 0 20px #454545;
   animation: slideInR 0.2s ease-in-out forwards;
 }
+
 table{
   width: 100%;
   padding: 1%;
   border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.input-to-table{
+  margin-bottom: 2%;
+  padding-top: 0;
+  padding-right: 5%;
+  padding-left: 5%;
+  height: 100px;
+  text-align: left;
   overflow-y: scroll;
 }
 
@@ -249,6 +260,18 @@ tr:hover{
 
 tr:active{
   background-color: #B9B9B9;
+}
+
+.delete-btn{
+  width: 10%;
+}
+
+.delete-btn:hover{
+  background-color: rgba(46, 82, 196, 0.75);
+}
+
+.delete-btn:active{
+  background-color: rgba(46, 82, 196, 0.5);
 }
 
 .form-compose{
@@ -316,3 +339,36 @@ tr:active{
 .file-input {
   display: none;
 }
+
+.tool-container{
+  display: flex;
+  padding: 0.5%;
+  margin: 0.5%;
+}
+
+.tool-btn{
+  padding: 1%;
+  margin: 0.5%;
+  color: white;
+  background-color: rgba(46, 82, 196, 1);
+  border: 1px solid rgba(46, 82, 196, 1);
+  border-radius: 10px;
+}
+
+.tool-btn:hover{
+  background-color: rgba(46, 82, 196, 0.75);
+}
+
+.tool-btn:active{
+  background-color: rgba(46, 82, 196, 0.5);
+}
+
+.tool-txt{
+  padding: 1%;
+  margin: 0.5%;
+  color: rgba(46, 82, 196, 1);
+  background-color: white;
+  border: 1px solid rgba(46, 82, 196, 1);
+  border-radius: 10px;
+}
+
