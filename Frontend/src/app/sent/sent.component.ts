@@ -17,6 +17,8 @@ export class SentComponent implements OnInit {
   constructor(private service: UserService) { }
 
   ngOnInit(): void {
+    console.log("hello world from sent");
+    //// store the emails you got so as not to have to load them multiple times
     this.getPosts();
   }
 
@@ -24,7 +26,7 @@ export class SentComponent implements OnInit {
     this.service.findUser(this.service.email).subscribe((data: User) => {
       this.sent = data.sent;
       console.log(this.sent);
-      this.service.getEmails(this.sent!).subscribe((response: any) =>{
+      this.service.getEmails(this.sent!, "sent", this.service.email!).subscribe((response: any) =>{
         this.EMAILS = response;
       });
     });

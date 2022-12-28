@@ -35,5 +35,8 @@ public class EmailService {
         return emails;
     }
 
+    public void deleteEmail(Long id){
+        emailRepo.deleteById(id);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.Backend.Email.model.email;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +22,7 @@ public class EmailBuilder {
         this.email.setSubject(subject);
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.email.setDate(date);
     }
 

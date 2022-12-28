@@ -62,6 +62,14 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public List<Long> getSent() {
+        return sent;
+    }
+
+    public List<Long> getInbox() {
+        return inbox;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -76,6 +84,7 @@ public class User implements Serializable {
 
     public void sendEmail(userService userService, Email email){
         this.sent.add(email.getId());
+        email.addAlink();
         userService.updateUser(this);
         ArrayList<String> notExist = new ArrayList<>();
         List<String> toWho = email.getToWho();
@@ -84,28 +93,31 @@ public class User implements Serializable {
             if(toWhom != null) {
                 toWhom.inbox.add(email.getId());
                 userService.updateUser(toWhom);
+                email.addAlink();
             }else
                 notExist.add(toWho.get(i));
         }
-        
+        ///send a message to the inbox saying that the email doesn't exist /// to do
     }
 
-    public void deleteEmail(Long id, String folderName){
+    public boolean deleteEmail(Long id, String folderName, userService userService){
+        boolean success = false;
         if(folderName.equals("inbox"))
-            this.inbox.remove(Long.valueOf(id));
+            success = this.inbox.remove(Long.valueOf(id));
         else if (folderName.equals("sent")) {
-            this.sent.remove(Long.valueOf(id));
+            success = this.sent.remove(Long.valueOf(id));
         }
 
-
-        this.deleted.add(id);
+        if(success) {
+            this.deleted.add(id);
+            userService.updateUser(this);
+            return true;
+        }
+        return false;
     }
 
-    public List<Long> getSent() {
-        return sent;
+    public boolean removeFromDeleted(Long id){
+        return this.deleted.remove(Long.valueOf(id));
     }
 
-    public List<Long> getInbox() {
-        return inbox;
-    }
 }
