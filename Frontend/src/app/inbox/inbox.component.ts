@@ -35,6 +35,8 @@ export class InboxComponent implements OnInit {
   }
 
   deleteEmail(email: any) {
-    this.service.deleteEmails(email.id, this.service.email, "inbox");
+    console.log(this.EMAILS.indexOf(email));
+    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
+    this.service.deleteEmails(this.service.email, email.id, "inbox").subscribe();
   }
 }

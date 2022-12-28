@@ -33,8 +33,8 @@ export class UserService {
     return this.http.get("http://localhost:8080/email/getEmails/" + ids);
   }
 
-  deleteEmails(id: number, user: string | undefined, folderName: string){
-    return this.http.delete("http://localhost:8080/email/delete/" + id + "/" +  user + "/" + folderName);
+  deleteEmails(user: string | undefined, id: number, folderName: string){
+    return this.http.delete("http://localhost:8080/email/delete/" + user + "/" +  id + "/" + folderName);
   }
 
 }

@@ -36,6 +36,8 @@ export class SentComponent implements OnInit {
   }
 
   deleteEmail(email: any) {
-    this.service.deleteEmails(email.id, this.service.email, "sent");
+    console.log(this.EMAILS.indexOf(email));
+    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
+    this.service.deleteEmails(this.service.email, email.id, "sent").subscribe();
   }
 }
