@@ -112,7 +112,8 @@ public class User implements Serializable {
     }
 
     public void addToDraft(Long id, UserService userService){
-        this.draft.add(id);
+        if(!this.draft.contains(id))
+            this.draft.add(id);
         userService.saveUser(this);
     }
 
