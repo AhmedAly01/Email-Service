@@ -61,8 +61,8 @@ public class UserResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/email/compose")
-    public ResponseEntity sendEmail(@RequestBody Object finishedEmail) throws JsonProcessingException {
+    @PostMapping("/email/compose/{draft}")
+    public ResponseEntity sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws JsonProcessingException {
 
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
@@ -79,7 +79,7 @@ public class UserResource {
         User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
-        if(finished) {
+        if(finished && !draft) {
             emailBuilder.setPriority(res.get("priority"));
             emailBuilder.setDate(LocalDateTime.now());
             //        emailBuilder.setAttachments();
