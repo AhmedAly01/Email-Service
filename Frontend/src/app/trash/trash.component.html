@@ -9,6 +9,12 @@
       <option value="subject">Subject (a-z)</option>
     </select>
     <input class="tool-txt" type="text" placeholder="search">
+    <pagination-controls
+      previousLabel="Prev"
+      nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"
+    >
+    </pagination-controls>
   </div>
   <table>
     <tr style="background-color: #D9D9D9">
@@ -31,10 +37,4 @@
       <td (click)="deleteEmail(email)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
-  <pagination-controls
-    previousLabel="Prev"
-    nextLabel="Next"
-    (pageChange)="onTableDataChange($event)"
-  >
-  </pagination-controls>
 </div>
