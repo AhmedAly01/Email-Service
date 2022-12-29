@@ -29,7 +29,7 @@ public class Email implements Serializable {
     private String body;
     @Lob
     @Column(name="file", columnDefinition = "BLOB")
-    private byte[] attachments; /////// Turn the object to string and save cuz sql retarted
+    private List<Long> attachments; /////// Turn the object to string and save cuz sql retarted
     private boolean seen;////// not needed modify it later
     private Integer importance;///////
     private Integer links;
@@ -63,9 +63,9 @@ public class Email implements Serializable {
         return body;
     }
 
-    public File getAttachments() {
+    public List<Long> getAttachments() {
 
-        return (File) SerializationUtils.deserialize(attachments);
+        return attachments;
     }
 
     public boolean isSeen() {
@@ -104,7 +104,7 @@ public class Email implements Serializable {
         this.body = body;
     }
 
-    public void setAttachments(byte[] attachments) {
+    public void setAttachments(List<Long> attachments) {
         this.attachments = attachments;
     }
 
@@ -139,7 +139,7 @@ public class Email implements Serializable {
                 ", subject='" + subject + '\'' +
                 ", date=" + date +
                 ", body='" + body + '\'' +
-                ", attachments=" + Arrays.toString(attachments) +
+                ", attachments=" + attachments +
                 ", seen=" + seen +
                 ", importance=" + importance +
                 ", links=" + links +
