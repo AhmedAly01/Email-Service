@@ -8,6 +8,7 @@ export class CacheService {
   sent: any;
   trash: any;
   draft: any;
+  contacts: any;
 
   constructor() { }
 }
