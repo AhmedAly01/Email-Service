@@ -34,19 +34,9 @@ public class Email implements Serializable {
     private Integer importance;///////
     private Integer links;
 
-    private LocalDateTime deletionTime;
 
     public Email() {
-        this.deletionTime = null;
         this.links = 0;
-    }
-
-    public LocalDateTime getDeletionTime() {
-        return deletionTime;
-    }
-
-    public void setDeletionTime(LocalDateTime deletionTime) {
-        this.deletionTime = deletionTime;
     }
 
     public Long getId() {

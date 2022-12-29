@@ -81,7 +81,7 @@ public class UserResource {
         emailBuilder.setPriority(res.get("priority"));
         emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setId(res.get("id"));
-        emailBuilder.setAttachments(res.get("attachments"));
+//        emailBuilder.setAttachments(res.get("attachments"));
 
         User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
@@ -107,15 +107,12 @@ public class UserResource {
         List<Email> emails = emailService.findEmails(ids);
         if(folderName.equals("trash")){
             LocalDateTime currDateTime = LocalDateTime.now().minusDays(30);
-            User user = null;
+            User user = userService.findUser(email);
+            List<LocalDateTime> deletionTimes = user.getDeletionTime();
             for(int i=0;i<emails.size();i++){
                 Email currEmail = emails.get(i);
-                if(currEmail.getDate().isBefore(currDateTime)){
-                    if(user == null){
-                        user = userService.findUser(email);
-                    }
+                if(deletionTimes.get(i).isBefore(currDateTime)){
                     user.removeFromDeleted(currEmail.getId());
-
                     emails.remove(currEmail);
                     if(currEmail.removeAlink() <= 0){
                         emailService.deleteEmail(currEmail.getId());
@@ -144,7 +141,6 @@ public class UserResource {
             userService.saveUser(user);
         }else{
             user.deleteEmail(id, folderName, userService);
-            currEmail.setDeletionTime(LocalDateTime.now());
             emailService.addEmail(currEmail);
         }
         return new ResponseEntity<>(HttpStatus.OK);
