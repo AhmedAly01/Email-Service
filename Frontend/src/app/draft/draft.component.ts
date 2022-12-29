@@ -21,7 +21,7 @@ export class DraftComponent implements OnInit {
   draft: number[] | undefined = [];
   reload: boolean | undefined = false;
   key: any;
-  sort: any = 'dateNew';
+  sort: any = '';
 
   constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
@@ -64,6 +64,7 @@ export class DraftComponent implements OnInit {
     this.emailService.body = email.body;
     this.emailService.subject = email.subject;
     this.emailService.id = email.id;
+    this.emailService.priority = email.importance;
     this.router.navigateByUrl('home/compose').then();
   }
 

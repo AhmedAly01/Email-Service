@@ -5,7 +5,6 @@ import {Observable} from "rxjs";
 import {Email} from "../../models/email/email";
 import {Contact} from "../../models/contact/contact";
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +25,6 @@ export class UserService {
   }
 
   sendEmail(email: Email){
-    console.log(email);
     return this.http.post<Email>("http://localhost:8080/email/compose/" + false, email);
   }
 
@@ -48,6 +46,7 @@ export class UserService {
   }
 
   getContacts(ids: number[]) {
+    if (ids.length == 0) return;
     return this.http.get("http://localhost:8080/contact/get/" + ids);
   }
 

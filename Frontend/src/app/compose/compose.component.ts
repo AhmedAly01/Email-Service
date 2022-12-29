@@ -15,7 +15,7 @@ export class ComposeComponent implements OnInit {
   subject: string | undefined;
   body: string | undefined;
   attachments: object[] | undefined = [];
-  priority: number | undefined;
+  priority: any = "0";
   fileName: string = '';
   files: string[] | undefined = [];
   id: any;
@@ -26,6 +26,7 @@ export class ComposeComponent implements OnInit {
     this.receivers = this.emailService.to;
     this.body = this.emailService.body;
     this.subject = this.emailService.subject;
+    this.priority = this.emailService.priority;
     this.id = this.emailService.id;
   }
 
@@ -42,7 +43,7 @@ export class ComposeComponent implements OnInit {
 
   sendEmail(){
     this.from = this.service.email;
-    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, this.priority);
     if(this.id > 0){
       email.setId(this.id);
     }
@@ -65,14 +66,14 @@ export class ComposeComponent implements OnInit {
   }
 
   removeReceiver(receiver: string) {
-    if (this.to?.length != 0) {
+    if (this.receivers?.length != 0) {
       this.receivers?.splice(this.receivers?.indexOf(receiver),1);
     }
   }
 
   saveDraft() {
     this.from = this.service.email;
-    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, this.priority);
     this.service.saveDraft(email).subscribe();
     alert("Saved Draft!");
   }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../service/user/user-service.service";
 import {User} from "../models/user/user";
-import {Email} from "../models/email/email";
 import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
@@ -21,7 +20,7 @@ export class TrashComponent implements OnInit {
   trash: number[] | undefined = [];
   reload: boolean | undefined;
   key: any;
-  sort: any = 'dateNew';
+  sort: any = '';
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
@@ -30,7 +29,6 @@ export class TrashComponent implements OnInit {
       this.router.navigateByUrl('').then();
     }
     this.getPosts();
-    this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
   getPosts(){
