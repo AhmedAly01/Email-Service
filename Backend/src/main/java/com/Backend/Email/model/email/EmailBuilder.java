@@ -51,9 +51,9 @@ public class EmailBuilder {
     public boolean setAttachments(Object attachments) throws IOException {
         if(attachments == null)
             return false;
-        AttachmentsList temp = (AttachmentsList) attachments;
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println(temp.get(0).getContentType());
+//        AttachmentsList temp = (AttachmentsList) attachments;
+//        System.out.println("--------------------------------------------------------------------------");
+//        System.out.println(temp.get(0).getContentType());
 
 //        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //        ObjectOutputStream oos = new ObjectOutputStream(bos);

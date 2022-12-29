@@ -10,6 +10,7 @@ export class CacheService {
   trash: any;
   draft: any;
   contacts: any;
+  priority: any;
 
   constructor() { }
 }

@@ -6,10 +6,10 @@
       <option value="" disabled selected hidden>Sort By</option>
       <option value="dateNew">Newest to Oldest</option>
       <option value="dateOld">Oldest to Newest</option>
+      <option value="priority">Priority</option>
       <option value="sender">Sender (A-z)</option>
       <option value="subject">Subject (A-z)</option>
       <option value="body">Body (A-z)</option>
-
     </select>
     <input class="tool-txt" type="text" placeholder="search" [(ngModel)]="key" (ngModelChange)="search(key)">
     <pagination-controls

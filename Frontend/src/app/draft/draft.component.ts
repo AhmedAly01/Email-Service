@@ -64,6 +64,7 @@ export class DraftComponent implements OnInit {
     this.emailService.body = email.body;
     this.emailService.subject = email.subject;
     this.emailService.id = email.id;
+    this.emailService.priority = email.importance;
     this.router.navigateByUrl('home/compose').then();
   }
 

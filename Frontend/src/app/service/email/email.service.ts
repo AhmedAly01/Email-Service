@@ -8,5 +8,7 @@ export class EmailService {
   subject: any = '';
   body: any = '';
   id: any = -1;
+  priority: any = "0";
+
   constructor() { }
 }

@@ -6,8 +6,9 @@ export class Email {
   private date: object | undefined;
   body: string | undefined;
   private attachments: object[] | undefined;
-  private priority: number | undefined;
+  priority: number | undefined;
   toWho: any;
+  importance: any;
 
 
   constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: object[], priority?: number) {
