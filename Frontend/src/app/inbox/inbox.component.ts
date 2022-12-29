@@ -20,7 +20,7 @@ export class InboxComponent implements OnInit {
   inbox: number[] | undefined = [];
   reload: boolean | undefined = false;
   key: any;
-  sort: any = 'dateNew';
+  sort: any = '';
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
@@ -29,7 +29,6 @@ export class InboxComponent implements OnInit {
       this.router.navigateByUrl('').then();
     }
     this.getPosts();
-    this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
   getPosts(){
