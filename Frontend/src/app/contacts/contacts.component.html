@@ -14,7 +14,7 @@
         <td class="delete-btn" (click)="removeEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
       </tr>
     </table>
-    <button type="submit" class="contact-btn" [disabled]="contactFrom.invalid || (emails!.length == 0)" (click)="addContact()">Add contact</button>
+    <button type="submit" class="contact-btn" [disabled]="contactFrom.invalid || (emails!.length == 0)" (click)="addContact();">Add contact</button>
   </div>
 </div>
 <div class="email-container">
@@ -43,6 +43,7 @@
       <td>{{contact.name}}</td>
       <td>{{contact.emails}}</td>
       <td (click)="deleteContact(contact)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+      <td (click)="renameContact(contact)" class="delete-btn"><img src="assets/img/rename.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
 </div>

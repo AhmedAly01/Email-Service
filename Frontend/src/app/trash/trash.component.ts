@@ -19,6 +19,7 @@ export class TrashComponent implements OnInit {
   tableSize: number = 11;
   trash: number[] | undefined = [];
   reload: boolean | undefined;
+  key: any;
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
@@ -62,5 +63,22 @@ export class TrashComponent implements OnInit {
   close(){
     document.getElementById('light')!.style.display='none';
     document.getElementById('fade')!.style.display='none';
+  }
+
+  search(key: any) {
+    const res : any = [];
+    for (const email of this.EMAILS) {
+      if (email.fromWho.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || email.toWho.toString().toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.subject.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.body.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.date.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        res.push(email);
+      }
+    }
+    this.EMAILS = res;
+    if (res.length === 0 || !key) {
+      this.getPosts();
+    }
   }
 }

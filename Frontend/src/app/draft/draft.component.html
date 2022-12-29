@@ -8,7 +8,7 @@
       <option value="sender">Sender (a-z)</option>
       <option value="subject">Subject (a-z)</option>
     </select>
-    <input class="tool-txt" type="text" placeholder="search">
+    <input class="tool-txt" type="text" placeholder="search" [(ngModel)]="key" (ngModelChange)="search(key)">
     <pagination-controls
       previousLabel="Prev"
       nextLabel="Next"
