@@ -9,7 +9,6 @@ import {EmailService} from "../service/email/email.service";
   styleUrls: ['./compose.component.css']
 })
 export class ComposeComponent implements OnInit {
-
   from: string | undefined;
   to: string | undefined;
   receivers: string[] | undefined = [];

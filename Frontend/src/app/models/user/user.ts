@@ -6,7 +6,7 @@ export class User {
   sent: number[] | undefined;
   deleted: number[] | undefined;
   draft: number[] | undefined;
-
+  contacts: number[] | undefined;
 
   constructor(name?: string, email?: string, password?: string) {
     this.name = name;

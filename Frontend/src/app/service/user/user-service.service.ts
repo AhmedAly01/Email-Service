@@ -3,6 +3,7 @@ import {User} from "../../models/user/user";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Email} from "../../models/email/email";
+import {Contact} from "../../models/contact/contact";
 
 
 @Injectable({
@@ -42,4 +43,15 @@ export class UserService {
     return this.http.post<Email>("http://localhost:8080/email/compose/" + true, email);
   }
 
+  addContact(contact: Contact) {
+    return this.http.post<Contact>("http://localhost:8080/contact/add/" + this.email, contact);
+  }
+
+  getContacts(ids: number[]) {
+    return this.http.get("http://localhost:8080/contact/get/" + ids);
+  }
+
+  deleteContacts(user: string | undefined, id: number){
+    return this.http.delete("http://localhost:8080/contact/delete/" + user + "/" + id);
+  }
 }

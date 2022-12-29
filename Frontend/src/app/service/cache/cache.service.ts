@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CacheService {
+  user: any;
   inbox: any;
   sent: any;
   trash: any;

@@ -4,6 +4,8 @@ import {UserService} from "../service/user/user-service.service";
 import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
+import {User} from "../models/user/user";
+import {EmailService} from "../service/email/email.service";
 
 @Component({
   selector: 'app-contacts',
@@ -17,10 +19,11 @@ export class ContactsComponent implements OnInit {
   name: string | undefined = '';
   email: string | undefined = '';
   emails: string[] | undefined = [];
+  contacts: number[] | undefined = [];
   CONTACTS: any;
   reload: boolean = false;
 
-  constructor(private contact: Contact, private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -30,7 +33,19 @@ export class ContactsComponent implements OnInit {
   }
 
   getContacts(){
-    //this is where we give a get request to the back to get the contacts list
+    if (this.cache.contacts === undefined || this.reload) {
+      this.service.user!.subscribe((data: User) => {
+        this.contacts = data.contacts;
+        this.service.getContacts(this.contacts!)?.subscribe((response: any) => {
+          this.CONTACTS = response;
+          this.cache.contacts = this.CONTACTS;
+        });
+      });
+    }
+    else {
+      this.CONTACTS = this.cache.contacts;
+    }
+    this.reload = false;
   }
 
   removeEmail(email: string) {
@@ -49,8 +64,9 @@ export class ContactsComponent implements OnInit {
   }
 
   addContact() {
-    this.contact = new Contact(this.name, this.emails)
-    //here we put the request to post the contact to the database
+    let contact = new Contact(this.name, this.emails)
+    console.log(contact);
+    this.service.addContact(contact).subscribe();
   }
 
   onTableDataChange(event: any) {
@@ -59,10 +75,12 @@ export class ContactsComponent implements OnInit {
   }
 
   deleteContact(contact: any) {
-    //this is where we can delete contacts from the database.
+    this.CONTACTS.splice(this.CONTACTS.indexOf(contact),1);
+    this.service.deleteContacts(this.service.email, contact.id).subscribe();
   }
 
-  compose(email: any) {
-    //this is the event when you click on a contact
+  compose(contact: Contact) {
+    this.emailService.to = contact.emails;
+    this.router.navigateByUrl('home/compose').then();
   }
 }

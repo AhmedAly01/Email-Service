@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {SignedInAuthGuard} from "../guards/signed-in-auth.guard";
 import {UserService} from "../service/user/user-service.service";
 import {User} from "../models/user/user";
+import {CacheService} from "../service/cache/cache.service";
 
 @Component({
   selector: 'app-home',
@@ -13,15 +14,21 @@ import {User} from "../models/user/user";
 export class HomeComponent implements OnInit {
   user: string | undefined;
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private signedAuth: SignedInAuthGuard) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private signedAuth: SignedInAuthGuard, private cache: CacheService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
       this.router.navigateByUrl('').then();
     }
-    this.service.user?.subscribe((data: User) => {
-      this.user = data.name
-    });
+    if (this.cache.user === undefined) {
+      this.service.user?.subscribe((data: User) => {
+        this.user = data.name;
+        this.cache.user = this.user;
+      });
+    }
+    else {
+      this.user = this.cache.user;
+    }
   }
 
   signOut() {
