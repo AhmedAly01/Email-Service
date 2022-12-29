@@ -30,7 +30,7 @@ export class TrashComponent implements OnInit {
     if (this.cache.trash === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.trash = data.deleted;
-        this.service.getEmails(this.trash!, "trash", this.service.email!).subscribe((response: any) => {
+        this.service.getEmails(this.trash!, "trash", this.service.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.trash = this.EMAILS;
         });

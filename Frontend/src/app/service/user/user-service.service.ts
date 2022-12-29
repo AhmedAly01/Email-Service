@@ -30,6 +30,7 @@ export class UserService {
   }
 
   getEmails(ids: number[], folderName: string, email: string){
+    if (ids.length == 0) return;
     return this.http.get("http://localhost:8080/email/getEmails/" + email + "/" + folderName + "/" + ids);
   }
 

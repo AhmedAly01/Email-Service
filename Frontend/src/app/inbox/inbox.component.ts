@@ -32,7 +32,7 @@ export class InboxComponent implements OnInit {
     if (this.cache.inbox === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.inbox = data.inbox;
-        this.service.getEmails(this.inbox!, "inbox", this.service.email!).subscribe((response: any) => {
+        this.service.getEmails(this.inbox!, "inbox", this.service.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.inbox = this.EMAILS;
         });
