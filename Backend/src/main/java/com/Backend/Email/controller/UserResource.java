@@ -1,21 +1,28 @@
 package com.Backend.Email.controller;
 
+import com.Backend.Email.model.attachment.Attachment;
+import com.Backend.Email.model.attachment.ResponseAttachment;
 import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
+import com.Backend.Email.services.AttachmentsService;
 import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RequestMapping("/")
@@ -23,13 +30,14 @@ import java.util.*;
 public class UserResource {
     private final UserService userService;
     private final EmailService emailService;
-
     private final ContactService contactService;
+    private final AttachmentsService attachmentsService;
 
-    public UserResource(UserService userService, EmailService emailService, ContactService contactService){
+    public UserResource(UserService userService, EmailService emailService, ContactService contactService, AttachmentsService attachmentsService){
         this.userService = userService;
         this.emailService = emailService;
         this.contactService = contactService;
+        this.attachmentsService = attachmentsService;
     }
 
     @GetMapping("/user/getAll")
@@ -67,7 +75,7 @@ public class UserResource {
     }
 
     @PostMapping("/email/compose/{draft}")
-    public ResponseEntity sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws IOException {
+    public ResponseEntity<Long> sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws IOException {
 
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
@@ -81,7 +89,6 @@ public class UserResource {
         emailBuilder.setPriority(res.get("priority"));
         emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setId(res.get("id"));
-//        emailBuilder.setAttachments(res.get("attachments"));
 
         User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
@@ -97,8 +104,36 @@ public class UserResource {
             email.setLinks(1);
         }
 
-        emailService.addEmail(email);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        email = emailService.addEmail(email);
+        return new ResponseEntity<>(email.getId(), HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/email/compose/attachments/{id}")
+    public ResponseEntity addAttachments(@RequestParam("file") MultipartFile attachments, @PathVariable("id") Long id) throws IOException {
+        if(attachments == null)
+            return new ResponseEntity<>(HttpStatus.OK);
+        List<Long> attachIds = new ArrayList<>();
+        for(int i=0;i<1;i++){
+            attachIds.add(attachmentsService.store(attachments).getId());
+        }
+        Email email = this.emailService.findEmail(id);
+        email.setAttachments(attachIds);
+        this.emailService.addEmail(email);
+        return new ResponseEntity(email.getAttachments(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/email/get/attachments")
+    public ResponseEntity<List<ResponseAttachment>> getAttachment(){
+        List<ResponseAttachment> files = attachmentsService.getAllFiles().map(attachment -> {
+            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/files/").path(attachment.getId().toString()).toUriString();
+
+            return new ResponseAttachment(attachment.getName(), fileUri, attachment.getType(), attachment.getData().length);
+        }).collect(Collectors.toList());
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
 

@@ -1,12 +1,9 @@
 package com.Backend.Email.model.email;
 
-import com.Backend.Email.model.attachmentsList.AttachmentsList;
-import org.springframework.util.SerializationUtils;
+import com.Backend.Email.services.AttachmentsService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,20 +45,16 @@ public class EmailBuilder {
         return true;
     }
 
-    public boolean setAttachments(Object attachments) throws IOException {
-        if(attachments == null)
+    public boolean setAttachments(Object unparsedAttachs, AttachmentsService attachmentsService) throws IOException {
+        if(unparsedAttachs == null)
             return false;
-        AttachmentsList temp = (AttachmentsList) attachments;
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println(temp.get(0).getContentType());
+        List<Long> ids = null;
+        List<Object> attachsObj = new ArrayList<Object>((Collection<? extends Object>)(unparsedAttachs));
 
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(bos);
-//
-//        oos.writeObject(temp.get(0));
-//        oos.flush();
-//        this.email.setAttachments(bos.toByteArray());
-//        this.email.setAttachments(SerializationUtils.serialize(temp.get(0)));
+        for(int i=0;i<attachsObj.size();i++){
+            ids.add(attachmentsService.store((MultipartFile) attachsObj.get(i)).getId());
+        }
+        this.email.setAttachments(ids);
         return true;
     }
 
