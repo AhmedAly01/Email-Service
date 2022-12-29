@@ -30,17 +30,23 @@ public class Email implements Serializable {
     @Lob
     @Column(name="file", columnDefinition = "BLOB")
     private byte[] attachments; /////// Turn the object to string and save cuz sql retarted
-    private boolean seen;//////
+    private boolean seen;////// not needed modify it later
     private Integer importance;///////
-
     private Integer links;
 
-
-
-
+    private LocalDateTime deletionTime;
 
     public Email() {
+        this.deletionTime = null;
         this.links = 0;
+    }
+
+    public LocalDateTime getDeletionTime() {
+        return deletionTime;
+    }
+
+    public void setDeletionTime(LocalDateTime deletionTime) {
+        this.deletionTime = deletionTime;
     }
 
     public Long getId() {

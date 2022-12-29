@@ -119,6 +119,8 @@ public class UserResource {
                     emails.remove(currEmail);
                     if(currEmail.removeAlink() <= 0){
                         emailService.deleteEmail(currEmail.getId());
+                    }else{
+                        emailService.addEmail(currEmail);
                     }
                 }
             }
@@ -133,15 +135,18 @@ public class UserResource {
     @Transactional
     public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("folderName") String folderName) {
         User user = userService.findUser(email);
+        Email currEmail = emailService.findEmail(id);
         if (folderName.equals("trash")){
             user.removeFromDeleted(id);
-            Email currEmail = emailService.findEmail(id);
             if(currEmail.removeAlink() <= 0){
                 emailService.deleteEmail(currEmail.getId());
             }
             userService.saveUser(user);
-        }else
+        }else{
             user.deleteEmail(id, folderName, userService);
+            currEmail.setDeletionTime(LocalDateTime.now());
+            emailService.addEmail(currEmail);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
