@@ -62,7 +62,7 @@ export class ContactsComponent implements OnInit {
     //this is where we can delete contacts from the database.
   }
 
-  compose(email: string) {
+  compose(email: any) {
     //this is the event when you click on a contact
   }
 }
