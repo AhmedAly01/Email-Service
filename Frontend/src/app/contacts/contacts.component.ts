@@ -65,8 +65,9 @@ export class ContactsComponent implements OnInit {
 
   addContact() {
     let contact = new Contact(this.name, this.emails)
-    console.log(contact);
     this.service.addContact(contact).subscribe();
+    this.name = '';
+    this.emails = [];
   }
 
   onTableDataChange(event: any) {
@@ -82,5 +83,11 @@ export class ContactsComponent implements OnInit {
   compose(contact: Contact) {
     this.emailService.to = contact.emails;
     this.router.navigateByUrl('home/compose').then();
+  }
+
+  renameContact(contact: any) {
+    this.name = contact.name;
+    this.emails = contact.emails;
+    this.deleteContact(contact);
   }
 }

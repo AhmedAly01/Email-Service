@@ -4,6 +4,7 @@ import {User} from "../models/user/user";
 import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
+import {SortService} from "../service/sort/sort.service";
 
 @Component({
   selector: 'app-inbox',
@@ -18,14 +19,17 @@ export class InboxComponent implements OnInit {
   tableSize: number = 11;
   inbox: number[] | undefined = [];
   reload: boolean | undefined = false;
+  key: any;
+  sort: any = 'dateNew';
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
       this.router.navigateByUrl('').then();
     }
     this.getPosts();
+    this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
   getPosts(){
@@ -63,5 +67,25 @@ export class InboxComponent implements OnInit {
   close(){
     document.getElementById('light')!.style.display='none';
     document.getElementById('fade')!.style.display='none';
+  }
+
+  search(key: any) {
+    const res : any = [];
+    for (const email of this.EMAILS) {
+      if (email.toWho.toString().toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.subject.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.body.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.date.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        res.push(email);
+      }
+    }
+    this.EMAILS = res;
+    if (res.length === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
+  sortEmails() {
+    this.sortService.sortFactory(this.sort, this.EMAILS);
   }
 }
