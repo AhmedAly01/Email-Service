@@ -12,6 +12,7 @@ import {CacheService} from "../service/cache/cache.service";
 })
 export class SentComponent implements OnInit {
   EMAILS: any;
+  email: any = '';
   page: number = 1;
   count: number = 0;
   tableSize: number = 11;
@@ -52,5 +53,16 @@ export class SentComponent implements OnInit {
     console.log(this.EMAILS.indexOf(email));
     this.EMAILS.splice(this.EMAILS.indexOf(email),1);
     this.service.deleteEmails(this.service.email, email.id, "sent").subscribe();
+  }
+
+  popUp(email: any) {
+    this.email = email;
+    document.getElementById('light')!.style.display='block';
+    document.getElementById('fade')!.style.display='block';
+  }
+
+  close(){
+    document.getElementById('light')!.style.display='none';
+    document.getElementById('fade')!.style.display='none';
   }
 }

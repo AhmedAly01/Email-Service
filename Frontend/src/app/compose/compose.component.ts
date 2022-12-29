@@ -56,7 +56,7 @@ export class ComposeComponent implements OnInit {
   }
 
   removeReceiver(receiver: string) {
-    if (this.to != null) {
+    if (this.to?.length != 0) {
       this.receivers?.splice(this.receivers?.indexOf(receiver),1);
     }
   }

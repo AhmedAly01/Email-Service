@@ -12,6 +12,7 @@ import {CacheService} from "../service/cache/cache.service";
 })
 export class InboxComponent implements OnInit {
   EMAILS: any;
+  email: any = '';
   page: number = 1;
   count: number = 0;
   tableSize: number = 11;
@@ -53,4 +54,14 @@ export class InboxComponent implements OnInit {
     this.service.deleteEmails(this.service.email, email.id, "inbox").subscribe();
   }
 
+  popUp(email: any) {
+    this.email = email;
+    document.getElementById('light')!.style.display='block';
+    document.getElementById('fade')!.style.display='block';
+  }
+
+  close(){
+    document.getElementById('light')!.style.display='none';
+    document.getElementById('fade')!.style.display='none';
+  }
 }
