@@ -7,6 +7,6 @@ export class EmailService {
   to: any = [];
   subject: any = '';
   body: any = '';
-
+  id: any = -1;
   constructor() { }
 }

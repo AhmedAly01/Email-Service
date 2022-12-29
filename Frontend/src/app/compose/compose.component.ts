@@ -19,6 +19,7 @@ export class ComposeComponent implements OnInit {
   priority: number | undefined;
   fileName: string = '';
   files: string[] | undefined = [];
+  id: any;
 
   constructor(private service: UserService, private emailService: EmailService) { }
 
@@ -26,22 +27,28 @@ export class ComposeComponent implements OnInit {
     this.receivers = this.emailService.to;
     this.body = this.emailService.body;
     this.subject = this.emailService.subject;
+    this.id = this.emailService.id;
   }
 
   onFileSelected(event : any) {
 
-    const file:File = event.target.files[0];
+    let file: any = event.target.files[0];
 
     if (file) {
       this.fileName = file.name;
       this.files?.push(file.name);
       this.attachments?.push(file);
     }
+    
+    
   }
 
   sendEmail(){
     this.from = this.service.email;
     let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    if(this.id > 0){
+      email.setId(this.id);
+    }
     this.service.sendEmail(email).subscribe();
     alert("Sent Successfully!");
   }
