@@ -1,5 +1,7 @@
 package com.Backend.Email.model.user;
+import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
+import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.UserService;
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -17,6 +19,9 @@ public class User implements Serializable {
     private String password;
 
     @ElementCollection
+    private List<Long> contacts;
+
+    @ElementCollection
     private List<Long> inbox;
 
     @ElementCollection
@@ -28,6 +33,14 @@ public class User implements Serializable {
     @ElementCollection
     private List<Long> deleted;
 
+    public User() {}
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -38,14 +51,6 @@ public class User implements Serializable {
 
     public List<Long> getDeleted() {
         return deleted;
-    }
-
-    public User() {}
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
     }
 
     public String getName() {
@@ -76,12 +81,17 @@ public class User implements Serializable {
         return inbox;
     }
 
+    public List<Long> getContacts() {
+        return contacts;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", contacts=" + contacts +
                 ", inbox=" + inbox +
                 ", sent=" + sent +
                 ", draft=" + draft +
@@ -138,5 +148,16 @@ public class User implements Serializable {
 
     public boolean removeFromDeleted(Long id){
         return this.deleted.remove(Long.valueOf(id));
+    }
+
+
+    public void addContact(ContactService contactService, Contact contact){
+        contact = contactService.saveContact(contact);
+        this.contacts.add(contact.getId());
+    }
+
+    public void deleteContact(ContactService contactService, Long id){
+        this.contacts.remove(Long.valueOf(id));
+        contactService.deleteContact(id);
     }
 }
