@@ -6,6 +6,7 @@ import {CacheService} from "../service/cache/cache.service";
 import {User} from "../models/user/user";
 import {EmailService} from "../service/email/email.service";
 import {Email} from "../models/email/email";
+import {SortService} from "../service/sort/sort.service";
 
 @Component({
   selector: 'app-draft',
@@ -20,8 +21,9 @@ export class DraftComponent implements OnInit {
   draft: number[] | undefined = [];
   reload: boolean | undefined = false;
   key: any;
+  sort: any = 'dateNew';
 
-  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -49,6 +51,7 @@ export class DraftComponent implements OnInit {
   onTableDataChange(event: any) {
     this.page = event;
     this.getPosts();
+    this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
   deleteEmail(email: any) {
@@ -78,5 +81,9 @@ export class DraftComponent implements OnInit {
     if (res.length === 0 || !key) {
       this.getPosts();
     }
+  }
+
+  sortEmails() {
+    this.sortService.sortFactory(this.sort, this.EMAILS);
   }
 }
