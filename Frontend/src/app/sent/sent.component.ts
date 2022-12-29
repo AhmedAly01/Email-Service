@@ -32,7 +32,7 @@ export class SentComponent implements OnInit {
     if (this.cache.sent === undefined || this.reload) {
       this.service.user!.subscribe((data: User) => {
         this.sent = data.sent;
-        this.service.getEmails(this.sent!, "sent", this.service.email!).subscribe((response: any) => {
+        this.service.getEmails(this.sent!, "sent", this.service.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.sent = this.EMAILS;
         });

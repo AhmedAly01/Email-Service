@@ -33,7 +33,7 @@ export class DraftComponent implements OnInit {
     if (this.cache.draft === undefined || this.reload) {
       this.userService.user!.subscribe((data: User) => {
         this.draft = data.draft;
-        this.userService.getEmails(this.draft!, "draft", this.userService.email!).subscribe((response: any) => {
+        this.userService.getEmails(this.draft!, "draft", this.userService.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.draft = this.EMAILS;
         });
@@ -60,6 +60,6 @@ export class DraftComponent implements OnInit {
     this.emailService.body = email.body;
     this.emailService.subject = email.subject;
     this.emailService.id = email.id;
-    this.router.navigateByUrl('home/compose');
+    this.router.navigateByUrl('home/compose').then();
   }
 }

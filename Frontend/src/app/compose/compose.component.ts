@@ -39,8 +39,8 @@ export class ComposeComponent implements OnInit {
       this.files?.push(file.name);
       this.attachments?.push(file);
     }
-    
-    
+
+
   }
 
   sendEmail(){
@@ -51,6 +51,10 @@ export class ComposeComponent implements OnInit {
     }
     this.service.sendEmail(email).subscribe();
     alert("Sent Successfully!");
+    this.to = '';
+    this.receivers = [];
+    this.subject = '';
+    this.body = '';
   }
 
   appendReceiver() {

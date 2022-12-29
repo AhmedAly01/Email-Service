@@ -359,6 +359,7 @@ tr:active{
   z-index: 1001;
   -moz-opacity: 0.8;
   opacity: .80;
+  border-radius: 20px;
   animation: FadeIn 0.2s ease-in-out;
 }
 .white_content {
