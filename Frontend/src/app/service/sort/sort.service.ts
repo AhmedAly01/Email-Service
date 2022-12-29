@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class SortService {
 
-
   constructor() { }
 
   sortFactory(sortType: string, EMAILS: any){
@@ -20,6 +19,9 @@ export class SortService {
     }
     else if (sortType === 'subject') {
       EMAILS.sort((a: any, b: any) => (a.subject < b.subject ? -1 : 1));
+    }
+    else if (sortType === 'body') {
+      EMAILS.sort((a: any, b: any) => (a.body < b.body ? -1 : 1));
     }
   }
 
