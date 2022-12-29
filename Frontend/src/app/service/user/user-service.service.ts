@@ -25,6 +25,7 @@ export class UserService {
   }
 
   sendEmail(email: Email){
+    console.log(email);
     return this.http.post<Email>("http://localhost:8080/email/compose/" + false, email);
   }
 
