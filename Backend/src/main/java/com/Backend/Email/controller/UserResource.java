@@ -1,17 +1,19 @@
 package com.Backend.Email.controller;
 
+import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
+import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -22,16 +24,19 @@ public class UserResource {
     private final UserService userService;
     private final EmailService emailService;
 
-    public UserResource(UserService userService, EmailService emailService){
+    private final ContactService contactService;
+
+    public UserResource(UserService userService, EmailService emailService, ContactService contactService){
         this.userService = userService;
         this.emailService = emailService;
+        this.contactService = contactService;
     }
 
-    @GetMapping("/user/findAll")
-    public ResponseEntity<String>  getAllUsers(){
+    @GetMapping("/user/getAll")
+    public ResponseEntity<List<User>>  getAllUsers(){
         List<User> users =  userService.findAllUsers();
         System.out.println(users.toString());
-        return new ResponseEntity<>(users.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/user/find/{email}")
@@ -62,9 +67,7 @@ public class UserResource {
     }
 
     @PostMapping("/email/compose/{draft}")
-    public ResponseEntity sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws JsonProcessingException {
-
-        System.out.println(finishedEmail.toString());
+    public ResponseEntity sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws IOException {
 
         Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
         EmailBuilder emailBuilder = new EmailBuilder();
@@ -78,12 +81,12 @@ public class UserResource {
         emailBuilder.setPriority(res.get("priority"));
         emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setId(res.get("id"));
+        emailBuilder.setAttachments(res.get("attachments"));
 
         User user = userService.findUser(res.get("from").toString());
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
         if(finished && !draft) {
-            //        emailBuilder.setAttachments();
             List<Integer> notExist = null;
 
             if (user != null) {
@@ -145,6 +148,52 @@ public class UserResource {
     @GetMapping("/email/getAll")
     public ResponseEntity<List<Email>> getAllEmails(){
         return new ResponseEntity<>(emailService.getAll(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/contact/getAll")
+    public ResponseEntity<List<Contact>> getAllContacts(){
+        return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
+    }
+
+    @PostMapping("/contact/add/{email}")
+    public ResponseEntity addContact(@RequestBody Contact contact, @PathVariable String email){
+        System.out.println(contact.toString());
+        User user = userService.findUser(email);
+        user.addContact(contactService, contact);
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/contact/get/{ids}")
+    public ResponseEntity<List<Contact>> getContacts(@PathVariable List<Long> ids){
+        return new ResponseEntity<>(contactService.findContacts(ids), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/contact/delete/{email}/{id}")
+    @Transactional
+    public ResponseEntity<?> deleteContact(@PathVariable("id") Long id, @PathVariable("email") String email) {
+        User user = userService.findUser(email);
+        user.deleteContact(contactService, id);
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping("/contact/update/{field}/{id}")
+    public ResponseEntity<Contact> updateContact(@PathVariable String field, @PathVariable Long id, @RequestBody Object change){
+        Contact contact = contactService.findContact(id);
+        Map<String, Object> res = new ObjectMapper().convertValue(change, HashMap.class);
+
+        if(field.equals("name")){
+            contact.setName(res.get("name").toString());
+        }else if(field.equals("emails")){
+            contact.setEmails(new ArrayList<String>((Collection<? extends String>)(res.get("emails"))));
+        }
+
+        contactService.saveContact(contact);
+
+        return new ResponseEntity<>(contact, HttpStatus.OK);  ////////leave it as it is until common grounds is found with front
     }
 
 

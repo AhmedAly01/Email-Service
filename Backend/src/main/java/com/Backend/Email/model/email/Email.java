@@ -3,7 +3,9 @@ package com.Backend.Email.model.email;
 import jakarta.persistence.*;
 
 import jakarta.persistence.Id;
+import org.springframework.util.SerializationUtils;
 
+import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +35,10 @@ public class Email implements Serializable {
 
     private Integer links;
 
+
+
+
+
     public Email() {
         this.links = 0;
     }
@@ -61,8 +67,9 @@ public class Email implements Serializable {
         return body;
     }
 
-    public byte[] getAttachments() {
-        return attachments;
+    public File getAttachments() {
+
+        return (File) SerializationUtils.deserialize(attachments);
     }
 
     public boolean isSeen() {

@@ -1,8 +1,16 @@
 package com.Backend.Email.model.email;
 
+import com.Backend.Email.model.attachmentsList.AttachmentsList;
+import org.springframework.util.SerializationUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class EmailBuilder {
     Email email;
@@ -40,10 +48,20 @@ public class EmailBuilder {
         return true;
     }
 
-    public boolean setAttachments(byte[] attachments) {
+    public boolean setAttachments(Object attachments) throws IOException {
         if(attachments == null)
             return false;
-        this.email.setAttachments(attachments);
+        AttachmentsList temp = (AttachmentsList) attachments;
+        System.out.println("--------------------------------------------------------------------------");
+        System.out.println(temp.get(0).getContentType());
+
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        ObjectOutputStream oos = new ObjectOutputStream(bos);
+//
+//        oos.writeObject(temp.get(0));
+//        oos.flush();
+//        this.email.setAttachments(bos.toByteArray());
+//        this.email.setAttachments(SerializationUtils.serialize(temp.get(0)));
         return true;
     }
 
