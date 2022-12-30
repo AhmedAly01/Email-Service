@@ -1,12 +1,9 @@
 package com.Backend.Email.model.email;
 
-import com.Backend.Email.model.attachmentsList.AttachmentsList;
-import org.springframework.util.SerializationUtils;
+import com.Backend.Email.services.AttachmentsService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;

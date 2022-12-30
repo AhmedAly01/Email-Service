@@ -21,6 +21,13 @@
       <textarea placeholder="body" class="text-area-compose" [(ngModel)]="body" name="body" #bodyInput="ngModel" required></textarea>
       <div class="error" *ngIf="bodyInput.invalid && bodyInput.touched">*this field is required</div>
     </div>
+    <select class="tool-btn" [(ngModel)]="priority" name="priority" required>
+      <option value="0" disabled selected hidden>Priority</option>
+      <option value="1">Urgent</option>
+      <option value="2">Work</option>
+      <option value="3">Personal</option>
+      <option value="4">Advertisement</option>
+    </select>
     <div style="text-align: right">
       <button type="submit" class="send-btn" [disabled]="emailCompose.invalid || (receivers!.length == 0)">Send!</button>
     </div>

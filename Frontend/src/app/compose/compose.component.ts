@@ -9,7 +9,6 @@ import {EmailService} from "../service/email/email.service";
   styleUrls: ['./compose.component.css']
 })
 export class ComposeComponent implements OnInit {
-
   from: string | undefined;
   to: string | undefined;
   receivers: string[] | undefined = [];
@@ -27,6 +26,7 @@ export class ComposeComponent implements OnInit {
     this.receivers = this.emailService.to;
     this.body = this.emailService.body;
     this.subject = this.emailService.subject;
+    this.priority = this.emailService.priority;
     this.id = this.emailService.id;
   }
 
@@ -39,18 +39,21 @@ export class ComposeComponent implements OnInit {
       this.files?.push(file.name);
       this.attachments?.push(file);
     }
-    
-    
   }
 
   sendEmail(){
     this.from = this.service.email;
-    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, this.priority);
     if(this.id > 0){
       email.setId(this.id);
     }
     this.service.sendEmail(email).subscribe();
     alert("Sent Successfully!");
+    this.to = '';
+    this.receivers = [];
+    this.attachments = [];
+    this.subject = '';
+    this.body = '';
   }
 
   appendReceiver() {
@@ -63,14 +66,14 @@ export class ComposeComponent implements OnInit {
   }
 
   removeReceiver(receiver: string) {
-    if (this.to != null) {
+    if (this.receivers?.length != 0) {
       this.receivers?.splice(this.receivers?.indexOf(receiver),1);
     }
   }
 
   saveDraft() {
     this.from = this.service.email;
-    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, 10);
+    let email = new Email(this.from, this.receivers, this.subject, new Date(), this.body, this.attachments, this.priority);
     this.service.saveDraft(email).subscribe();
     alert("Saved Draft!");
   }

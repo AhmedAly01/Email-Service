@@ -1,2 +1,49 @@
 <app-home></app-home>
-<p>Contacts work!</p>
+<div class="email-container">
+  <div style="display: flex; align-items: center;">
+    <label style="margin: 2%">Add New Contact</label>
+    <form class="contact-form" #contactFrom="ngForm">
+      <label>Name</label>
+      <input class="contact-txt" type="text" placeholder="Name" [(ngModel)]="name" name="name" required>
+      <label>Email</label>
+      <input class="contact-txt" type="text" placeholder="Email" (keyup.enter)="appendEmail()" [(ngModel)]="email" name="email">
+    </form>
+    <table style="margin-bottom: 1%; width: 30%">
+      <tr *ngFor="let email of emails">
+        <td style="border: none; text-align: left">{{email}}</td>
+        <td class="delete-btn" (click)="removeEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+      </tr>
+    </table>
+    <button type="submit" class="contact-btn" [disabled]="contactFrom.invalid || (emails!.length == 0)" (click)="addContact();">Add contact</button>
+  </div>
+</div>
+<div class="email-container">
+  <div class="tool-container">
+    <button class="tool-btn" (click)="reload=true; getContacts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <input class="tool-txt" type="text" placeholder="search">
+    <pagination-controls
+      previousLabel="Prev"
+      nextLabel="Next"
+      (pageChange)="onTableDataChange($event)"
+    >
+    </pagination-controls>
+  </div>
+  <table>
+    <tr style="background-color: #D9D9D9">
+      <td>name</td>
+      <td>emails</td>
+    </tr>
+    <tr *ngFor="let contact of CONTACTS | paginate
+              : {
+                  itemsPerPage: tableSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index" (click)="compose(contact)">
+      <td>{{contact.name}}</td>
+      <td>{{contact.emails}}</td>
+      <td (click)="deleteContact(contact)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+      <td (click)="renameContact(contact)" class="delete-btn"><img src="assets/img/rename.svg" width="25" height="25" alt="Text"></td>
+    </tr>
+  </table>
+</div>

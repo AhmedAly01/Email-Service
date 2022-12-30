@@ -2,13 +2,16 @@
 <div class="email-container">
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getPosts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
-    <select class="tool-btn">
-      <option value="dateOtoN">Newest to Oldest</option>
-      <option value="dateNtoO">Oldest to Newest</option>
-      <option value="sender">Sender (a-z)</option>
-      <option value="subject">Subject (a-z)</option>
+    <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortEmails()">
+      <option value="" disabled selected hidden>Sort By</option>
+      <option value="dateNew">Newest to Oldest</option>
+      <option value="dateOld">Oldest to Newest</option>
+      <option value="priority">Priority</option>
+      <option value="sender">Sender (A-z)</option>
+      <option value="subject">Subject (A-z)</option>
+      <option value="body">Body (A-z)</option>
     </select>
-    <input class="tool-txt" type="text" placeholder="search">
+    <input class="tool-txt" type="text" placeholder="search" [(ngModel)]="key" (ngModelChange)="search(key)">
     <pagination-controls
       previousLabel="Prev"
       nextLabel="Next"
@@ -28,11 +31,23 @@
                   currentPage: page,
                   totalItems: count
                 };
-          let i = index">
+          let i = index" (click)="popUp(email)">
       <td>{{email.toWho}}</td>
       <td>{{email.subject}}</td>
       <td>{{email.date}}</td>
       <td (click)="deleteEmail(email)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
+  <div id="light" class="white_content">
+    <div><span style="font-weight: bolder">To: </span> {{email.toWho}}</div>
+    <br>
+    <div><span style="font-weight: bolder">Date: </span> {{email.date}}</div>
+    <br>
+    <div><span style="font-weight: bolder">Subject: </span> {{email.subject}}</div>
+    <br>
+    <div style="font-weight: bolder">Body: </div>
+    <br>
+    <div>{{email.body}}</div>
+  </div>
+  <div id="fade" class="black_overlay" (click)="close()"></div>
 </div>

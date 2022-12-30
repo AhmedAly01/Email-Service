@@ -5,6 +5,7 @@ import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.UserService;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +34,22 @@ public class User implements Serializable {
     @ElementCollection
     private List<Long> deleted;
 
+    @ElementCollection
+    private List<LocalDateTime> deletionTime;
+
+
+
+
     public User() {}
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public List<LocalDateTime> getDeletionTime() {
+        return deletionTime;
     }
 
     public String getPassword() {
@@ -139,6 +150,7 @@ public class User implements Serializable {
 
         if(success) {
             this.deleted.add(id);
+            this.deletionTime.add(LocalDateTime.now());
             userService.saveUser(this);
             return true;
         }
@@ -146,8 +158,10 @@ public class User implements Serializable {
 
     }
 
-    public boolean removeFromDeleted(Long id){
-        return this.deleted.remove(Long.valueOf(id));
+    public void removeFromDeleted(Long id){
+        int index = this.deleted.indexOf(id);
+        this.deleted.remove(index);
+        this.deletionTime.remove(index);
     }
 
 

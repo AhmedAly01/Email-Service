@@ -8,6 +8,7 @@ export class Email {
   private attachments: File[] | undefined;
   priority: number | undefined;
   toWho: any;
+  importance: any;
 
 
   constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: File[], priority?: number) {

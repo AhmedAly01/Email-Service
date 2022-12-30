@@ -1,21 +1,28 @@
 package com.Backend.Email.controller;
 
+import com.Backend.Email.model.attachment.Attachment;
+import com.Backend.Email.model.attachment.ResponseAttachment;
 import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.model.user.User;
+import com.Backend.Email.services.AttachmentsService;
 import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RequestMapping("/")
@@ -23,13 +30,14 @@ import java.util.*;
 public class UserResource {
     private final UserService userService;
     private final EmailService emailService;
-
     private final ContactService contactService;
+    private final AttachmentsService attachmentsService;
 
-    public UserResource(UserService userService, EmailService emailService, ContactService contactService){
+    public UserResource(UserService userService, EmailService emailService, ContactService contactService, AttachmentsService attachmentsService){
         this.userService = userService;
         this.emailService = emailService;
         this.contactService = contactService;
+        this.attachmentsService = attachmentsService;
     }
 
     @GetMapping("/user/getAll")
@@ -144,15 +152,12 @@ public class UserResource {
         List<Email> emails = emailService.findEmails(ids);
         if(folderName.equals("trash")){
             LocalDateTime currDateTime = LocalDateTime.now().minusDays(30);
-            User user = null;
+            User user = userService.findUser(email);
+            List<LocalDateTime> deletionTimes = user.getDeletionTime();
             for(int i=0;i<emails.size();i++){
                 Email currEmail = emails.get(i);
-                if(currEmail.getDate().isBefore(currDateTime)){
-                    if(user == null){
-                        user = userService.findUser(email);
-                    }
+                if(deletionTimes.get(i).isBefore(currDateTime)){
                     user.removeFromDeleted(currEmail.getId());
-
                     emails.remove(currEmail);
                     if(currEmail.removeAlink() <= 0){
                         emailService.deleteEmail(currEmail.getId());
@@ -181,7 +186,6 @@ public class UserResource {
             userService.saveUser(user);
         }else{
             user.deleteEmail(id, folderName, userService);
-            currEmail.setDeletionTime(LocalDateTime.now());
             emailService.addEmail(currEmail);
         }
         return new ResponseEntity<>(HttpStatus.OK);

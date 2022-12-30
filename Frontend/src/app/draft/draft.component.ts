@@ -6,6 +6,7 @@ import {CacheService} from "../service/cache/cache.service";
 import {User} from "../models/user/user";
 import {EmailService} from "../service/email/email.service";
 import {Email} from "../models/email/email";
+import {SortService} from "../service/sort/sort.service";
 
 @Component({
   selector: 'app-draft',
@@ -19,8 +20,10 @@ export class DraftComponent implements OnInit {
   tableSize: number = 11;
   draft: number[] | undefined = [];
   reload: boolean | undefined = false;
+  key: any;
+  sort: any = '';
 
-  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -33,7 +36,7 @@ export class DraftComponent implements OnInit {
     if (this.cache.draft === undefined || this.reload) {
       this.userService.user!.subscribe((data: User) => {
         this.draft = data.draft;
-        this.userService.getEmails(this.draft!, "draft", this.userService.email!).subscribe((response: any) => {
+        this.userService.getEmails(this.draft!, "draft", this.userService.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.draft = this.EMAILS;
         });
@@ -48,6 +51,7 @@ export class DraftComponent implements OnInit {
   onTableDataChange(event: any) {
     this.page = event;
     this.getPosts();
+    this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
   deleteEmail(email: any) {
@@ -60,6 +64,27 @@ export class DraftComponent implements OnInit {
     this.emailService.body = email.body;
     this.emailService.subject = email.subject;
     this.emailService.id = email.id;
-    this.router.navigateByUrl('home/compose');
+    this.emailService.priority = email.importance;
+    this.router.navigateByUrl('home/compose').then();
+  }
+
+  search(key: any) {
+    const res : any = [];
+    for (const email of this.EMAILS) {
+      if (email.toWho.toString().toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.subject.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.body.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  email.date.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        res.push(email);
+      }
+    }
+    this.EMAILS = res;
+    if (res.length === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
+  sortEmails() {
+    this.sortService.sortFactory(this.sort, this.EMAILS);
   }
 }
