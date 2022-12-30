@@ -48,20 +48,15 @@ public class EmailBuilder {
         return true;
     }
 
-    public boolean setAttachments(Object attachments) throws IOException {
+    public boolean setAttachments(List<MultipartFile> attachments, AttachmentsService attachmentsService) throws IOException {
         if(attachments == null)
             return false;
-        AttachmentsList temp = (AttachmentsList) attachments;
-        System.out.println("--------------------------------------------------------------------------");
-        System.out.println(temp.get(0).getContentType());
+        List<Long> ids = new ArrayList<>();
 
-//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//        ObjectOutputStream oos = new ObjectOutputStream(bos);
-//
-//        oos.writeObject(temp.get(0));
-//        oos.flush();
-//        this.email.setAttachments(bos.toByteArray());
-//        this.email.setAttachments(SerializationUtils.serialize(temp.get(0)));
+        for(int i=0;i<attachments.size();i++){
+            ids.add(attachmentsService.store(attachments.get(i)).getId());
+        }
+        this.email.setAttachments(ids);
         return true;
     }
 

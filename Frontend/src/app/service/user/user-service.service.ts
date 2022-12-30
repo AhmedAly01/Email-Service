@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {User} from "../../models/user/user";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Email} from "../../models/email/email";
 
@@ -25,8 +25,18 @@ export class UserService {
   }
 
   sendEmail(email: Email){
-    console.log(email);
-    return this.http.post<Email>("http://localhost:8080/email/compose/" + false, email);
+    let params = new FormData();
+    params.append("draft", false as any);
+    params.append("from", email.getFrom());
+    params.append("to", email.getTo() as any);
+    params.append("subject", email.subject as string)
+    params.append("body", email.body as string)
+    params.append("priority", email.priority as any);
+    for(let attch of email.getAttachments()){
+      params.append("attachments", attch)
+    }
+
+    return this.http.post<Email>("http://localhost:8080/email/compose", params);
   }
 
   getEmails(ids: number[], folderName: string, email: string){
@@ -38,7 +48,19 @@ export class UserService {
   }
 
   saveDraft(email: Email){
-    return this.http.post<Email>("http://localhost:8080/email/compose/" + true, email);
+    let params = new FormData();
+    params.append("draft", false as any);
+    params.append("from", email.getFrom());
+    params.append("to", email.getTo() as any);
+    params.append("subject", email.subject as string)
+    params.append("body", email.body as string)
+    params.append("priority", email.priority as any);
+    for(let attch of email.getAttachments()){
+      params.append("attachments", attch)
+    }             
+
+    /////////////////////////////////////////////checkkkkkkkkkkkk pleaseeeeeeeeeeeeeeeeeeeeeeee
+    return this.http.post<Email>("http://localhost:8080/email/compose", params);
   }
 
 }
