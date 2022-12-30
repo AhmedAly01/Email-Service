@@ -74,23 +74,31 @@ public class UserResource {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/email/compose/{draft}")
-    public ResponseEntity<Long> sendEmail(@RequestBody Object finishedEmail, @PathVariable boolean draft) throws IOException {
 
-        Map<String, Object> res = new ObjectMapper().convertValue(finishedEmail, HashMap.class);
-        EmailBuilder emailBuilder = new EmailBuilder();
+    @PostMapping("/email/compose")
+    public ResponseEntity test(@RequestParam(value = "from", required = false) String from,
+                               @RequestParam(value = "to", required = false) List<String> to,
+                               @RequestParam(value = "subject", required = false) String subject,
+                               @RequestParam(value = "body", required = false) String body,
+                               @RequestParam(value = "priority", required = false) Integer priority,
+                               @RequestParam(value = "attachments", required = false) List<MultipartFile> attachments,
+                               @RequestParam(value = "id", required = false) Long id,
+                               @RequestParam(value = "draft", required = true) boolean draft) throws IOException {
 
         boolean finished = true;
+        EmailBuilder emailBuilder = new EmailBuilder();
 
-        finished = emailBuilder.setFrom(res.get("from")) && finished;
-        finished = emailBuilder.setTo((res.get("to"))) && finished;
-        finished = emailBuilder.setSubject(res.get("subject")) && finished;
-        finished = emailBuilder.setBody(res.get("body")) && finished;
-        emailBuilder.setPriority(res.get("priority"));
+        finished = emailBuilder.setFrom(from) && finished;
+        finished = emailBuilder.setTo(to) && finished;
+        finished = emailBuilder.setSubject(subject) && finished;
+        finished = emailBuilder.setBody(body) && finished;
+
+        emailBuilder.setPriority(priority);
+        emailBuilder.setAttachments(attachments, attachmentsService);
         emailBuilder.setDate(LocalDateTime.now());
-        emailBuilder.setId(res.get("id"));
+        emailBuilder.setId(id);
 
-        User user = userService.findUser(res.get("from").toString());
+        User user = userService.findUser(from);
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
         if(finished && !draft) {
@@ -104,9 +112,11 @@ public class UserResource {
             email.setLinks(1);
         }
 
-        email = emailService.addEmail(email);
-        return new ResponseEntity<>(email.getId(), HttpStatus.CREATED);
+        emailService.addEmail(email);
+        System.out.println(email);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
 
     @PostMapping("/email/compose/attachments/{id}")

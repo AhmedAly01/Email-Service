@@ -14,7 +14,7 @@ export class ComposeComponent implements OnInit {
   receivers: string[] | undefined = [];
   subject: string | undefined;
   body: string | undefined;
-  attachments: object[] | undefined = [];
+  attachments: File[] | undefined = [];
   priority: any = "0";
   fileName: string = '';
   files: string[] | undefined = [];

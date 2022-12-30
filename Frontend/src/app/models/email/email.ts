@@ -5,13 +5,13 @@ export class Email {
   subject: string | undefined;
   private date: object | undefined;
   body: string | undefined;
-  private attachments: object[] | undefined;
+  private attachments: File[] | undefined;
   priority: number | undefined;
   toWho: any;
   importance: any;
 
 
-  constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: object[], priority?: number) {
+  constructor(from?: string, to?: string[], subject?: string, date?: object, body?: string, attachments?: File[], priority?: number) {
     this.from = from;
     this.to = to;
     this.subject = subject;
@@ -70,11 +70,11 @@ export class Email {
     this.body = value;
   }
 
-  getAttachments(): object[] {
-    return <object[]>this.attachments;
+  getAttachments(): File[] {
+    return <File[]>this.attachments;
   }
 
-  setAttachments(value: object[]) {
+  setAttachments(value: File[]) {
     this.attachments = value;
   }
 

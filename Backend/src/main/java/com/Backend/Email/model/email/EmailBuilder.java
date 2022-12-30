@@ -45,14 +45,13 @@ public class EmailBuilder {
         return true;
     }
 
-    public boolean setAttachments(Object unparsedAttachs, AttachmentsService attachmentsService) throws IOException {
-        if(unparsedAttachs == null)
+    public boolean setAttachments(List<MultipartFile> attachments, AttachmentsService attachmentsService) throws IOException {
+        if(attachments == null)
             return false;
-        List<Long> ids = null;
-        List<Object> attachsObj = new ArrayList<Object>((Collection<? extends Object>)(unparsedAttachs));
+        List<Long> ids = new ArrayList<>();
 
-        for(int i=0;i<attachsObj.size();i++){
-            ids.add(attachmentsService.store((MultipartFile) attachsObj.get(i)).getId());
+        for(int i=0;i<attachments.size();i++){
+            ids.add(attachmentsService.store(attachments.get(i)).getId());
         }
         this.email.setAttachments(ids);
         return true;
