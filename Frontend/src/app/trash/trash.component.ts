@@ -118,5 +118,9 @@ export class TrashComponent implements OnInit {
       this.getPosts();
     }
   }
-  
+
+  recoverEmails(email: any, selected: boolean){
+    //subscribe to recover email service method
+  }
+
 }
