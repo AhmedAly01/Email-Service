@@ -22,6 +22,7 @@ export class InboxComponent implements OnInit {
   reload: boolean | undefined = false;
   key: any;
   sort: any = '';
+  attachments: any;
   selected: any = [];
   criteria: string = '';
   filterKey: string = '';
@@ -77,6 +78,9 @@ export class InboxComponent implements OnInit {
 
   popUp(email: any) {
     this.email = email;
+    this.service.getAttachsUrl(this.email.attachments).subscribe((res) =>{
+      this.attachments = res;
+    });
     document.getElementById('light')!.style.display='block';
     document.getElementById('fade')!.style.display='block';
   }
@@ -104,6 +108,10 @@ export class InboxComponent implements OnInit {
 
   sortEmails() {
     this.sortService.sortFactory(this.sort, this.EMAILS);
+  }
+
+  downloadAttachment(attachment: any){
+      this.service.downloadAttach(attachment);
   }
 
   selectEmail(email: any, event: any) {

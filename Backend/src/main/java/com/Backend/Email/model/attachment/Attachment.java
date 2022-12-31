@@ -15,7 +15,8 @@ public class Attachment{
 
     private String name;
     private String type;
-    @Lob
+
+    @Column(length = Integer.MAX_VALUE)
     private byte[] data;
 
     public Attachment(){}

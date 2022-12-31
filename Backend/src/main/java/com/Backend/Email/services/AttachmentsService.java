@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -28,9 +29,12 @@ public class AttachmentsService {
         return attachmentsRepo.save(attachment);
     }
 
+    public Stream<Attachment> getAttachment(Long id){
+        return attachmentsRepo.findById(id).stream();
+    }
 
-    public Attachment getAttachment(Long id){
-        return attachmentsRepo.findById(id).get();
+    public Stream<Attachment> getAttachments(List<Long> id){
+        return attachmentsRepo.findAllById(id).stream();
     }
 
     public Stream<Attachment> getAllFiles(){
