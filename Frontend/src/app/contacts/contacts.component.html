@@ -8,7 +8,7 @@
       <label>Email</label>
       <input class="contact-txt" type="text" placeholder="Email" (keyup.enter)="appendEmail()" [(ngModel)]="email" name="email">
     </form>
-    <table style="margin-bottom: 1%; width: 30%">
+    <table style="width: 30%" class="scrollable-table">
       <tr *ngFor="let email of emails">
         <td style="border: none; text-align: left">{{email}}</td>
         <td class="delete-btn" (click)="removeEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
