@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
 import {SortService} from "../service/sort/sort.service";
-import {createInvalidObservableTypeError} from "rxjs/internal/util/throwUnobservableError";
+import {FilterService} from "../service/filter/filter.service";
 
 @Component({
   selector: 'app-inbox',
@@ -22,15 +22,21 @@ export class InboxComponent implements OnInit {
   reload: boolean | undefined = false;
   key: any;
   sort: any = '';
-  selected: any= [];
+  selected: any = [];
+  criteria: string = '';
+  filterKey: string = '';
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService, private filterService: FilterService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
       this.router.navigateByUrl('').then();
     }
     this.getPosts();
+  }
+
+  ngOnChanges(){
+    if (this.filterKey == '') this.getPosts();
   }
 
   getPosts(){
@@ -108,4 +114,12 @@ export class InboxComponent implements OnInit {
       this.selected.splice(this.selected.indexOf(email),1);
     }
   }
+
+  filterEmails(key: string){
+    this.EMAILS = this.filterService.filter(key, this.criteria, this.EMAILS);
+    if (this.EMAILS === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
 }
