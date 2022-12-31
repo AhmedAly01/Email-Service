@@ -287,6 +287,7 @@ tr:active{
 .send-btn{
   width: 9%;
   margin: 1%;
+  margin-right: 20%;
   aspect-ratio: 3;
   background-color: #2e52c4;
   color: white;

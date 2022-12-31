@@ -2,13 +2,13 @@
 <div class="email-container">
   <form #emailCompose ="ngForm" class="form-compose">
     <div class="input-compose">
-      <label>To</label>
       <table class="scrollable-table">
         <tr *ngFor="let receiver of receivers">
           <td style="border: none; text-align: left">{{receiver}}</td>
           <td class="delete-btn" (click)="removeReceiver(receiver)"><img src="assets/img/trash.svg" width="20" height="20" alt="Text"></td>
         </tr>
       </table>
+      <label>To</label>
       <input type="text" placeholder="To" class="text-box-compose" (keyup.enter)="appendReceiver()" [(ngModel)]="to" name="to">
     </div>
     <div class="input-compose">
