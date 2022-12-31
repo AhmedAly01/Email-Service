@@ -3,6 +3,7 @@
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getPosts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
     <button class="tool-btn" (click)="deleteEmail(null, true)"><img src="assets/img/trash.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <button class="tool-btn" (click)="recoverEmails(null, true)"><img src="assets/img/recover.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortEmails()">
       <option value="" disabled selected hidden>Sort By</option>
       <option value="dateNew">Newest to Oldest</option>
@@ -48,6 +49,7 @@
       <td (click)="popUp(email)">{{email.subject}}</td>
       <td (click)="popUp(email)">{{email.date}}</td>
       <td (click)="deleteEmail(email, false)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+      <td (click)="recoverEmails(email, false)" class="delete-btn"><img src="assets/img/recover.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
   <div id="light" class="white_content">
