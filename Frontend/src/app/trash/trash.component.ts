@@ -120,7 +120,18 @@ export class TrashComponent implements OnInit {
   }
 
   recoverEmails(email: any, selected: boolean){
-    //subscribe to recover email service method
+    if (selected) {
+      for (let i = 0; i < this.selected.length; i++) {
+        this.EMAILS.splice(this.EMAILS.indexOf(this.selected[i]), 1);
+        this.selected[i] = this.selected[i].id;
+      }
+      this.service.recoverEmails(this.selected, this.service.email!).subscribe();
+    }
+    else {
+      let arr : number[] = [email.id];
+      this.EMAILS.splice(this.EMAILS.indexOf(email), 1);
+      this.service.recoverEmails(arr, this.service.email!).subscribe();
+    }
   }
 
 }

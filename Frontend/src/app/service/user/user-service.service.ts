@@ -35,7 +35,7 @@ export class UserService {
     for(let attach of email.getAttachments()){
       params.append("attachments", attach)
       console.log(attach);
-      
+
     }
 
     return this.http.post<Email>("http://localhost:8080/email/compose", params);
@@ -60,7 +60,7 @@ export class UserService {
     params.append("priority", email.priority as any);
     for(let attach of email.getAttachments()){
       params.append("attachments", attach)
-    }             
+    }
 
     /////////////////////////////////////////////checkkkkkkkkkkkk pleaseeeeeeeeeeeeeeeeeeeeeeee
     return this.http.post<Email>("http://localhost:8080/email/compose", params, {reportProgress: true, responseType: 'json'});
@@ -79,6 +79,9 @@ export class UserService {
     return this.http.delete("http://localhost:8080/contact/delete/" + user + "/" + id);
   }
 
+  recoverEmails(ids: number[], email: string){
+    return this.http.post<number[]>("http://localhost:8080/email/recover/" + email, ids);
+  }
 
   getAttachsUrl(attachIds: number[]){
     return this.http.get("http://localhost:8080/email/get/attachments/" + attachIds)
@@ -87,14 +90,14 @@ export class UserService {
   downloadAttach(attachPara: any){
     this.http.get(attachPara["url"] as string, {responseType: 'blob'}).subscribe((res: Blob) => {
       console.log(attachPara["type"]);
-      
+
       let file = new File([res as Blob], attachPara["name"], {type: (attachPara["type"] as string).toLowerCase()})
       let a = document.createElement('a');
       console.log(file);
-      
+
       a.href = URL.createObjectURL(file);
       a.download = attachPara["name"];
       a.click();
-    }); 
+    });
   }
 }

@@ -144,8 +144,8 @@ public class UserResource {
 //        return ResponseEntity.status(HttpStatus.OK).body(attachment.getId());
 //    }
 //
-    @PostMapping("/email/recover/{email}/{ids}")
-    public ResponseEntity recoverEmails(@PathVariable("ids") List<Long> ids, @PathVariable("email") String email){
+    @PostMapping("/email/recover/{email}")
+    public ResponseEntity recoverEmails(@RequestBody List<Long> ids, @PathVariable("email") String email){
         User user = userService.findUser(email);
         List<Email> emails = emailService.findEmails(ids);
         user.recoverEmails(emails);
