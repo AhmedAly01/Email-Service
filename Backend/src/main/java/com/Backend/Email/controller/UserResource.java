@@ -101,6 +101,8 @@ public class UserResource {
         User user = userService.findUser(from);
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
+        System.out.println(finished);
+        System.out.println(draft);
         if(finished && !draft) {
             List<Integer> notExist = null;
 
@@ -187,9 +189,10 @@ public class UserResource {
                 }
                 userService.saveUser(user);
             } else {
-                user.deleteEmail(currEmail.getId(), folderName, userService);
+                user.deleteEmail(currEmail.getId(), folderName);
                 emailService.addEmail(currEmail);
             }
+            userService.saveUser(user);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -221,9 +224,11 @@ public class UserResource {
 
     @DeleteMapping("/contact/delete/{email}/{id}")
     @Transactional
-    public ResponseEntity<?> deleteContact(@PathVariable("id") Long id, @PathVariable("email") String email) {
+    public ResponseEntity<?> deleteContact(@PathVariable("id") List<Long> ids, @PathVariable("email") String email) {
         User user = userService.findUser(email);
-        user.deleteContact(contactService, id);
+        for (int i = 0; i < ids.size(); i++){
+            user.deleteContact(contactService, ids.get(i));
+        }
         userService.saveUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

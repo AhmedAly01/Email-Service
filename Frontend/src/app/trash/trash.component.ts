@@ -21,6 +21,7 @@ export class TrashComponent implements OnInit {
   reload: boolean | undefined;
   key: any;
   sort: any = '';
+  selected: any = [];
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
@@ -52,10 +53,19 @@ export class TrashComponent implements OnInit {
     this.getPosts();
   }
 
-  deleteEmail(email: any) {
-    console.log(this.EMAILS.indexOf(email));
-    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
-    this.service.deleteEmails(this.service.email, email.id, "trash").subscribe();
+  deleteEmail(email: any, selected: boolean) {
+    if (!selected) {
+      this.EMAILS.splice(this.EMAILS.indexOf(email), 1);
+      this.service.deleteEmails(this.service.email, email.id, "trash").subscribe();
+    }
+    else if (selected) {
+      for (let i = 0; i < this.selected.length; i++){
+        this.EMAILS.splice(this.EMAILS.indexOf(this.selected[i]), 1);
+        this.selected[i] = this.selected[i].id;
+      }
+      this.service.deleteEmails(this.service.email, this.selected, "trash").subscribe();
+      this.selected = [];
+    }
   }
 
   popUp(email: any) {
@@ -88,5 +98,14 @@ export class TrashComponent implements OnInit {
 
   sortEmails() {
     this.sortService.sortFactory(this.sort, this.EMAILS);
+  }
+
+  selectEmail(email: any, event: any) {
+    if (event.target.checked){
+      this.selected.push(email);
+    }
+    else {
+      this.selected.splice(this.selected.indexOf(email),1);
+    }
   }
 }

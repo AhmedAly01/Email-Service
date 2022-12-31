@@ -26,6 +26,12 @@ export class SortService {
     else if (sortType === 'body') {
       EMAILS.sort((a: any, b: any) => (a.body < b.body ? -1 : 1));
     }
+    else if (sortType === 'ascending') {
+      EMAILS.sort((a: any, b: any) => (a.name < b.name ? -1 : 1));
+    }
+    else if (sortType === 'descending') {
+      EMAILS.sort((a: any, b: any) => (a.name > b.name ? -1 : 1));
+    }
   }
 
 }
