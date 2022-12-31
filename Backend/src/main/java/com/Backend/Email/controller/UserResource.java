@@ -175,18 +175,21 @@ public class UserResource {
 
     @DeleteMapping("/email/delete/{email}/{id}/{folderName}")
     @Transactional
-    public ResponseEntity<?> deleteEmail(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("folderName") String folderName) {
+    public ResponseEntity<?> deleteEmail(@PathVariable("id") List<Long> id, @PathVariable("email") String email, @PathVariable("folderName") String folderName) {
         User user = userService.findUser(email);
-        Email currEmail = emailService.findEmail(id);
-        if (folderName.equals("trash")){
-            user.removeFromDeleted(id);
-            if(currEmail.removeAlink() <= 0){
-                emailService.deleteEmail(currEmail.getId());
+        List<Email> emails = emailService.findEmails(id);
+        for(int i=0;i<emails.size();i++) {
+            Email currEmail = emails.get(i);
+            if (folderName.equals("trash")) {
+                user.removeFromDeleted(currEmail.getId());
+                if (currEmail.removeAlink() <= 0) {
+                    emailService.deleteEmail(currEmail.getId());
+                }
+                userService.saveUser(user);
+            } else {
+                user.deleteEmail(currEmail.getId(), folderName, userService);
+                emailService.addEmail(currEmail);
             }
-            userService.saveUser(user);
-        }else{
-            user.deleteEmail(id, folderName, userService);
-            emailService.addEmail(currEmail);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
