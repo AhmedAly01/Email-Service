@@ -8,7 +8,7 @@
       <label>Email</label>
       <input class="contact-txt" type="text" placeholder="Email" (keyup.enter)="appendEmail()" [(ngModel)]="email" name="email">
     </form>
-    <table style="margin-bottom: 1%; width: 30%">
+    <table style="width: 30%" class="scrollable-table">
       <tr *ngFor="let email of emails">
         <td style="border: none; text-align: left">{{email}}</td>
         <td class="delete-btn" (click)="removeEmail(email)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
@@ -20,7 +20,13 @@
 <div class="email-container">
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getContacts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
-    <input class="tool-txt" type="text" placeholder="search">
+    <button class="tool-btn" (click)="deleteContact(null, true)"><img src="assets/img/trash.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortContacts()">
+      <option value="" disabled selected hidden>Sort By</option>
+      <option value="ascending">(A-z)</option>
+      <option value="descending">(z-A)</option>
+    </select>
+    <input class="tool-txt" type="text" placeholder="search" [(ngModel)]="key" (ngModelChange)="search(key)">
     <pagination-controls
       previousLabel="Prev"
       nextLabel="Next"
@@ -30,6 +36,7 @@
   </div>
   <table>
     <tr style="background-color: #D9D9D9">
+      <td></td>
       <td>name</td>
       <td>emails</td>
     </tr>
@@ -39,10 +46,11 @@
                   currentPage: page,
                   totalItems: count
                 };
-          let i = index" (click)="compose(contact)">
-      <td>{{contact.name}}</td>
-      <td>{{contact.emails}}</td>
-      <td (click)="deleteContact(contact)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+          let i = index">
+      <td><input type="checkbox" (change)="selectContact(contact, $event)"></td>
+      <td (click)="compose(contact)">{{contact.name}}</td>
+      <td (click)="compose(contact)">{{contact.emails}}</td>
+      <td (click)="deleteContact(contact, false)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
       <td (click)="renameContact(contact)" class="delete-btn"><img src="assets/img/rename.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>

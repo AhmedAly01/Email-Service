@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
 import {SortService} from "../service/sort/sort.service";
+import {FilterService} from "../service/filter/filter.service";
 
 @Component({
   selector: 'app-inbox',
@@ -22,14 +23,21 @@ export class InboxComponent implements OnInit {
   key: any;
   sort: any = '';
   attachments: any;
+  selected: any = [];
+  criteria: string = '';
+  filterKey: string = '';
 
-  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
+  constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService, private filterService: FilterService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
       this.router.navigateByUrl('').then();
     }
     this.getPosts();
+  }
+
+  ngOnChanges(){
+    if (this.filterKey == '') this.getPosts();
   }
 
   getPosts(){
@@ -53,9 +61,19 @@ export class InboxComponent implements OnInit {
     this.getPosts();
   }
 
-  deleteEmail(email: any) {
-    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
-    this.service.deleteEmails(this.service.email, email.id, "inbox").subscribe();
+  deleteEmail(email: any, selected: boolean) {
+    if (!selected) {
+      this.EMAILS.splice(this.EMAILS.indexOf(email), 1);
+      this.service.deleteEmails(this.service.email, email.id, "inbox").subscribe();
+    }
+    else if (selected) {
+      for (let i = 0; i < this.selected.length; i++){
+        this.EMAILS.splice(this.EMAILS.indexOf(this.selected[i]), 1);
+        this.selected[i] = this.selected[i].id;
+      }
+      this.service.deleteEmails(this.service.email, this.selected, "inbox").subscribe();
+      this.selected = [];
+    }
   }
 
   popUp(email: any) {
@@ -95,4 +113,21 @@ export class InboxComponent implements OnInit {
   downloadAttachment(attachment: any){
       this.service.downloadAttach(attachment);
   }
+
+  selectEmail(email: any, event: any) {
+    if (event.target.checked){
+      this.selected.push(email);
+    }
+    else {
+      this.selected.splice(this.selected.indexOf(email),1);
+    }
+  }
+
+  filterEmails(key: string){
+    this.EMAILS = this.filterService.filter(key, this.criteria, this.EMAILS);
+    if (this.EMAILS === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
 }

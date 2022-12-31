@@ -46,13 +46,13 @@ export class UserService {
     return this.http.get("http://localhost:8080/email/getEmails/" + email + "/" + folderName + "/" + ids);
   }
 
-  deleteEmails(user: string | undefined, id: number, folderName: string){
-    return this.http.delete("http://localhost:8080/email/delete/" + user + "/" +  id + "/" + folderName);
+  deleteEmails(user: string | undefined, ids: number[], folderName: string){
+    return this.http.delete("http://localhost:8080/email/delete/" + user + "/" +  ids + "/" + folderName);
   }
 
   saveDraft(email: Email){
     let params = new FormData();
-    params.append("draft", false as any);
+    params.append("draft", true as any);
     params.append("from", email.getFrom());
     params.append("to", email.getTo() as any);
     params.append("subject", email.subject as string)
@@ -75,7 +75,7 @@ export class UserService {
     return this.http.get("http://localhost:8080/contact/get/" + ids);
   }
 
-  deleteContacts(user: string | undefined, id: number){
+  deleteContacts(user: string | undefined, id: number[]){
     return this.http.delete("http://localhost:8080/contact/delete/" + user + "/" + id);
   }
 

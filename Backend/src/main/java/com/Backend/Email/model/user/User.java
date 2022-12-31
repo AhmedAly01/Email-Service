@@ -138,7 +138,7 @@ public class User implements Serializable {
         userService.saveUser(this);
     }
 
-    public boolean deleteEmail(Long id, String folderName, UserService userService){
+    public boolean deleteEmail(Long id, String folderName){
         boolean success = false;
         if(folderName.equals("inbox"))
             success = this.inbox.remove(Long.valueOf(id));
@@ -151,7 +151,6 @@ public class User implements Serializable {
         if(success) {
             this.deleted.add(id);
             this.deletionTime.add(LocalDateTime.now());
-            userService.saveUser(this);
             return true;
         }
         return false;

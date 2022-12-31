@@ -7,6 +7,7 @@ import {User} from "../models/user/user";
 import {EmailService} from "../service/email/email.service";
 import {Email} from "../models/email/email";
 import {SortService} from "../service/sort/sort.service";
+import {FilterService} from "../service/filter/filter.service";
 
 @Component({
   selector: 'app-draft',
@@ -22,8 +23,11 @@ export class DraftComponent implements OnInit {
   reload: boolean | undefined = false;
   key: any;
   sort: any = '';
+  selected: any = [];
+  criteria: string = '';
+  filterKey: string = '';
 
-  constructor(private userService: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
+  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService, private filterService: FilterService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -34,9 +38,9 @@ export class DraftComponent implements OnInit {
 
   getPosts(){
     if (this.cache.draft === undefined || this.reload) {
-      this.userService.user!.subscribe((data: User) => {
+      this.service.user!.subscribe((data: User) => {
         this.draft = data.draft;
-        this.userService.getEmails(this.draft!, "draft", this.userService.email!)?.subscribe((response: any) => {
+        this.service.getEmails(this.draft!, "draft", this.service.email!)?.subscribe((response: any) => {
           this.EMAILS = response;
           this.cache.draft = this.EMAILS;
         });
@@ -54,9 +58,19 @@ export class DraftComponent implements OnInit {
     this.sortService.sortFactory('dateNew', this.EMAILS);
   }
 
-  deleteEmail(email: any) {
-    this.EMAILS.splice(this.EMAILS.indexOf(email),1);
-    this.userService.deleteEmails(this.userService.email, email.id, "draft").subscribe();
+  deleteEmail(email: any, selected: boolean) {
+    if (!selected) {
+      this.EMAILS.splice(this.EMAILS.indexOf(email), 1);
+      this.service.deleteEmails(this.service.email, email.id, "draft").subscribe();
+    }
+    else if (selected) {
+      for (let i = 0; i < this.selected.length; i++){
+        this.EMAILS.splice(this.EMAILS.indexOf(this.selected[i]), 1);
+        this.selected[i] = this.selected[i].id;
+      }
+      this.service.deleteEmails(this.service.email, this.selected, "draft").subscribe();
+      this.selected = [];
+    }
   }
 
   openDraft(email: Email) {
@@ -87,4 +101,22 @@ export class DraftComponent implements OnInit {
   sortEmails() {
     this.sortService.sortFactory(this.sort, this.EMAILS);
   }
+
+  selectEmail(email: any, event: any) {
+    if (event.target.checked){
+      this.selected.push(email);
+    }
+    else {
+      this.selected.splice(this.selected.indexOf(email),1);
+    }
+    console.log(this.selected);
+  }
+
+  filterEmails(key: string){
+    this.EMAILS = this.filterService.filter(key, this.criteria, this.EMAILS);
+    if (this.EMAILS === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
 }

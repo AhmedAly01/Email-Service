@@ -1,12 +1,12 @@
 <app-home></app-home>
 <div class="email-container">
-  <form #emailCompose ="ngForm" class="form-compose" (ngSubmit)="sendEmail()">
+  <form #emailCompose ="ngForm" class="form-compose">
     <div class="input-compose">
       <label>To</label>
-      <table style="margin-bottom: 1%">
+      <table class="scrollable-table">
         <tr *ngFor="let receiver of receivers">
           <td style="border: none; text-align: left">{{receiver}}</td>
-          <td class="delete-btn" (click)="removeReceiver(receiver)"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+          <td class="delete-btn" (click)="removeReceiver(receiver)"><img src="assets/img/trash.svg" width="20" height="20" alt="Text"></td>
         </tr>
       </table>
       <input type="text" placeholder="To" class="text-box-compose" (keyup.enter)="appendReceiver()" [(ngModel)]="to" name="to">
@@ -21,35 +21,29 @@
       <textarea placeholder="body" class="text-area-compose" [(ngModel)]="body" name="body" #bodyInput="ngModel" required></textarea>
       <div class="error" *ngIf="bodyInput.invalid && bodyInput.touched">*this field is required</div>
     </div>
-    <select class="tool-btn" [(ngModel)]="priority" name="priority" required>
+  </form>
+  <div style="display: flex; flex-direction: column; text-align: left; margin: 1%">
+    <table class="scrollable-table">
+      <tr *ngFor="let file of files">
+        <td style="border: none; text-align: left">{{file}}</td>
+        <td class="delete-btn" (click)="removeFile(file)"><img src="assets/img/trash.svg" width="20" height="20" alt="Text"></td>
+      </tr>
+    </table>
+    <div class="file-upload" style="margin: 1%">
+      {{fileName || "No file uploaded yet."}}
+      <button class="send-btn" (click)="fileUpload.click()">attach_file</button>
+    </div>
+    <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+  </div>
+  <div style="display: flex; margin: 1%">
+    <select class="send-btn" [(ngModel)]="priority" name="priority" required>
       <option value="0" disabled selected hidden>Priority</option>
       <option value="1">Urgent</option>
       <option value="2">Work</option>
       <option value="3">Personal</option>
       <option value="4">Advertisement</option>
     </select>
-    <div style="text-align: right">
-      <button type="submit" class="send-btn" [disabled]="emailCompose.invalid || (receivers!.length == 0)">Send!</button>
-    </div>
-  </form>
-  <div style="padding: 2%; text-align: right">
-  <button class="send-btn" (click)="saveDraft()">Save draft!</button>
-  </div>
-  <div class="input-compose">
-    <table style="margin-bottom: 1%">
-      <tr *ngFor="let file of files">
-        <td style="border: none; text-align: left">{{file}}</td>
-        <td class="delete-btn" (click)="removeFile(file)"><img src="assets/img/trash.svg" width="20" height="20" alt="Text"></td>
-      </tr>
-    </table>
-    <input type="file" class="file-input"
-           (change)="onFileSelected($event)" #fileUpload>
-    <div class="file-upload" style="font-size: 18px">
-      {{fileName || "No file uploaded yet."}}
-      <button class="send-btn"
-              (click)="fileUpload.click()">
-        attach_file
-      </button>
-    </div>
+    <button type="submit" class="send-btn" [disabled]="emailCompose.invalid || (receivers!.length == 0)" (click)="sendEmail()">Send!</button>
+    <button class="send-btn" (click)="saveDraft()">Save draft!</button>
   </div>
 </div>

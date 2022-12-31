@@ -285,7 +285,8 @@ tr:active{
 }
 
 .send-btn{
-  width: 10%;
+  width: 9%;
+  margin: 1%;
   aspect-ratio: 3;
   background-color: #2e52c4;
   color: white;
@@ -410,4 +411,12 @@ tr:active{
 
 .contact-btn:active{
   background-color: rgba(46, 82, 196, 0.5);
+}
+
+.scrollable-table{
+  padding: 0;
+  margin: 0.5%;
+  overflow-y: auto;
+  height: 85px;
+  display: block;
 }

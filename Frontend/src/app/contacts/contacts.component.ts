@@ -6,6 +6,7 @@ import {AuthGuard} from "../guards/auth.guard";
 import {CacheService} from "../service/cache/cache.service";
 import {User} from "../models/user/user";
 import {EmailService} from "../service/email/email.service";
+import {SortService} from "../service/sort/sort.service";
 
 @Component({
   selector: 'app-contacts',
@@ -22,8 +23,11 @@ export class ContactsComponent implements OnInit {
   contacts: number[] | undefined = [];
   CONTACTS: any;
   reload: boolean = false;
+  sort: string = '';
+  key: string = '';
+  selected: any = [];
 
-  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService) { }
+  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -75,9 +79,19 @@ export class ContactsComponent implements OnInit {
     this.getContacts();
   }
 
-  deleteContact(contact: any) {
-    this.CONTACTS.splice(this.CONTACTS.indexOf(contact),1);
-    this.service.deleteContacts(this.service.email, contact.id).subscribe();
+  deleteContact(email: any, selected: boolean) {
+    if (!selected) {
+      this.CONTACTS.splice(this.CONTACTS.indexOf(email), 1);
+      this.service.deleteContacts(this.service.email, email.id).subscribe();
+    }
+    else if (selected) {
+      for (let i = 0; i < this.selected.length; i++){
+        this.CONTACTS.splice(this.CONTACTS.indexOf(this.selected[i]), 1);
+        this.selected[i] = this.selected[i].id;
+      }
+      this.service.deleteContacts(this.service.email, this.selected).subscribe();
+      this.selected = [];
+    }
   }
 
   compose(contact: Contact) {
@@ -88,6 +102,34 @@ export class ContactsComponent implements OnInit {
   renameContact(contact: any) {
     this.name = contact.name;
     this.emails = contact.emails;
-    this.deleteContact(contact);
+    this.deleteContact(contact, false);
+  }
+
+  search(key: any) {
+    const res : any = [];
+    for (const contact of this.CONTACTS) {
+      if (contact.name.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        ||  contact.emails.toString().toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        res.push(contact);
+      }
+    }
+    this.CONTACTS = res;
+    if (res.length === 0 || !key) {
+      this.getContacts()
+    }
+  }
+
+  sortContacts() {
+    this.sortService.sortFactory(this.sort, this.CONTACTS);
+  }
+
+  selectContact(contact: any, event: any) {
+    if (event.target.checked){
+      this.selected.push(contact);
+    }
+    else {
+      this.selected.splice(this.selected.indexOf(contact),1);
+    }
+    console.log(this.selected);
   }
 }

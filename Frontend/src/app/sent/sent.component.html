@@ -2,6 +2,7 @@
 <div class="email-container">
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getPosts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
+    <button class="tool-btn" (click)="deleteEmail(null, true)"><img src="assets/img/trash.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortEmails()">
       <option value="" disabled selected hidden>Sort By</option>
       <option value="dateNew">Newest to Oldest</option>
@@ -12,6 +13,12 @@
       <option value="body">Body (A-z)</option>
     </select>
     <input class="tool-txt" type="text" placeholder="search" [(ngModel)]="key" (ngModelChange)="search(key)">
+    <select class="tool-btn" [(ngModel)]="criteria">
+      <option value="" disabled selected hidden>Filter By</option>
+      <option value="receiver">Receiver</option>
+      <option value="subject">Subject</option>
+    </select>
+    <input class="tool-txt" type="text" placeholder="filter" [(ngModel)]="filterKey" (ngModelChange)="filterEmails(filterKey)">
     <pagination-controls
       previousLabel="Prev"
       nextLabel="Next"
@@ -21,6 +28,7 @@
   </div>
   <table>
     <tr style="background-color: #D9D9D9">
+      <td></td>
       <td>to</td>
       <td>subject</td>
       <td>date</td>
@@ -31,11 +39,12 @@
                   currentPage: page,
                   totalItems: count
                 };
-          let i = index" (click)="popUp(email)">
-      <td>{{email.toWho}}</td>
-      <td>{{email.subject}}</td>
-      <td>{{email.date}}</td>
-      <td (click)="deleteEmail(email)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
+          let i = index">
+      <td><input type="checkbox" (change)="selectEmail(email, $event)"></td>
+      <td (click)="popUp(email)">{{email.toWho}}</td>
+      <td (click)="popUp(email)">{{email.subject}}</td>
+      <td (click)="popUp(email)">{{email.date}}</td>
+      <td (click)="deleteEmail(email, false)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
     </tr>
   </table>
   <div id="light" class="white_content">
