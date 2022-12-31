@@ -173,4 +173,19 @@ public class User implements Serializable {
         this.contacts.remove(Long.valueOf(id));
         contactService.deleteContact(id);
     }
+
+
+    public void recoverEmails(List<Email> emails){
+        for(int i=0;i<emails.size();i++){
+            Email currEmail = emails.get(i);
+            int index = this.deleted.indexOf(currEmail.getId());
+            this.deleted.remove(index);
+            this.deletionTime.remove(index);
+            if(currEmail.getFromWho().equals(email) && this.sent.contains(Long.valueOf(currEmail.getId()))){
+                this.sent.add(currEmail.getId());
+            }else{
+                this.inbox.add(currEmail.getId());
+            }
+        }
+    }
 }
