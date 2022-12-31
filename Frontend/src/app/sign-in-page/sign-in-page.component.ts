@@ -16,7 +16,13 @@ export class SignInPageComponent implements OnInit {
 
   constructor(private service: UserService, private router: Router, private authGuard: AuthGuard, private signedAuth: SignedInAuthGuard) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.service.getAttachsUrl([1]).subscribe((res: any) => {
+      console.log(res[0]);
+      this.service.downloadAttach(res[0]);
+    });
+    
+  }
 
   validateUser() {
     this.service.findUser(this.email).subscribe((data: User) => {

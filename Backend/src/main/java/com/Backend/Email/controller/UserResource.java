@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,26 +121,10 @@ public class UserResource {
     }
 
 
-
-    @PostMapping("/email/compose/attachments/{id}")
-    public ResponseEntity addAttachments(@RequestParam("file") MultipartFile attachments, @PathVariable("id") Long id) throws IOException {
-        if(attachments == null)
-            return new ResponseEntity<>(HttpStatus.OK);
-        List<Long> attachIds = new ArrayList<>();
-        for(int i=0;i<1;i++){
-            attachIds.add(attachmentsService.store(attachments).getId());
-        }
-        Email email = this.emailService.findEmail(id);
-        email.setAttachments(attachIds);
-        this.emailService.addEmail(email);
-        return new ResponseEntity(email.getAttachments(), HttpStatus.OK);
-    }
-
-
-    @GetMapping("/email/get/attachments")
-    public ResponseEntity<List<ResponseAttachment>> getAttachment(){
-        List<ResponseAttachment> files = attachmentsService.getAllFiles().map(attachment -> {
-            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/files/").path(attachment.getId().toString()).toUriString();
+    @GetMapping("/email/get/attachments/{id}")
+    public ResponseEntity<List<ResponseAttachment>> getAttachment(@PathVariable("id") List<Long> ids){
+        List<ResponseAttachment> files = attachmentsService.getAttachments(ids).map(attachment -> {
+            String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/attachments/").path(attachment.getId().toString()).toUriString();
 
             return new ResponseAttachment(attachment.getName(), fileUri, attachment.getType(), attachment.getData().length);
         }).collect(Collectors.toList());
@@ -145,6 +132,15 @@ public class UserResource {
 
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
+
+
+    @GetMapping("/attachments/{id}")
+    public ResponseEntity<Blob> downloadAttachment(@PathVariable("id") Long id) throws SQLException {
+        Attachment attachment = attachmentsService.getAttachment(id);
+        Blob blob = new SerialBlob(attachment.getData());
+        return new ResponseEntity<>(blob, HttpStatus.OK);
+    }
+
 
 
     @GetMapping("/email/getEmails/{email}/{folderName}/{ids}")

@@ -5,7 +5,7 @@ export class Email {
   subject: string | undefined;
   private date: object | undefined;
   body: string | undefined;
-  private attachments: File[] | undefined;
+  private attachments: File[] | any[] | undefined;
   priority: number | undefined;
   toWho: any;
   importance: any;

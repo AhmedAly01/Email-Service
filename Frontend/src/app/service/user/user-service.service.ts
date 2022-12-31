@@ -76,4 +76,17 @@ export class UserService {
   deleteContacts(user: string | undefined, id: number){
     return this.http.delete("http://localhost:8080/contact/delete/" + user + "/" + id);
   }
+
+
+  getAttachsUrl(attachIds: number[]){
+    return this.http.get("http://localhost:8080/email/get/attachments/" + attachIds)
+  }
+
+  downloadAttach(attachPara: any){
+    this.http.get(attachPara["url"] as string).subscribe((res: any) => {
+      let file = new File([res], attachPara["name"], {type: attachPara["type"]})
+      console.log(file);
+      
+    }); 
+  }
 }
