@@ -7,6 +7,7 @@ import {User} from "../models/user/user";
 import {EmailService} from "../service/email/email.service";
 import {Email} from "../models/email/email";
 import {SortService} from "../service/sort/sort.service";
+import {FilterService} from "../service/filter/filter.service";
 
 @Component({
   selector: 'app-draft',
@@ -23,8 +24,10 @@ export class DraftComponent implements OnInit {
   key: any;
   sort: any = '';
   selected: any = [];
+  criteria: string = '';
+  filterKey: string = '';
 
-  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService) { }
+  constructor(private service: UserService, private emailService: EmailService, private router: Router, private authGuard: AuthGuard, private cache: CacheService, private sortService: SortService, private filterService: FilterService) { }
 
   ngOnInit(): void {
     if (!this.authGuard.isSignedIn) {
@@ -108,4 +111,12 @@ export class DraftComponent implements OnInit {
     }
     console.log(this.selected);
   }
+
+  filterEmails(key: string){
+    this.EMAILS = this.filterService.filter(key, this.criteria, this.EMAILS);
+    if (this.EMAILS === 0 || !key) {
+      this.getPosts();
+    }
+  }
+
 }
