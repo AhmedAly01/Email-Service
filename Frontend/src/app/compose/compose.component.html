@@ -39,6 +39,7 @@
     <table style="margin-bottom: 1%">
       <tr *ngFor="let file of files">
         <td style="border: none; text-align: left">{{file}}</td>
+        <td class="delete-btn" (click)="removeFile(file)"><img src="assets/img/trash.svg" width="20" height="20" alt="Text"></td>
       </tr>
     </table>
     <input type="file" class="file-input"

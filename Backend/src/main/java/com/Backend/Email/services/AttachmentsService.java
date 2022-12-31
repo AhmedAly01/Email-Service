@@ -29,8 +29,8 @@ public class AttachmentsService {
         return attachmentsRepo.save(attachment);
     }
 
-    public Attachment getAttachment(Long id){
-        return attachmentsRepo.findById(id).orElse(null);
+    public Stream<Attachment> getAttachment(Long id){
+        return attachmentsRepo.findById(id).stream();
     }
 
     public Stream<Attachment> getAttachments(List<Long> id){

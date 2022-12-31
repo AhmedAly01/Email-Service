@@ -52,6 +52,13 @@
     <div style="font-weight: bolder">Body: </div>
     <br>
     <div style="overflow: auto">{{email.body}}</div>
+    <br>
+    <table>
+      <tr *ngFor="let attachment of attachments">
+        <td>{{attachment.name}}</td>
+        <td (click)="downloadAttachment(attachment)"><img src="assets/img/download.svg" width="25" height="25" alt="Text"></td>
+      </tr>
+    </table>
   </div>
   <div id="fade" class="black_overlay" (click)="close()"></div>
 </div>

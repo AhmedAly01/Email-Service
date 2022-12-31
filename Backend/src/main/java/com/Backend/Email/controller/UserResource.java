@@ -133,12 +133,23 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
+    @PostMapping("/upload")
+    public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        Attachment attachment = attachmentsService.store(file);
+
+        return ResponseEntity.status(HttpStatus.OK).body(attachment.getId());
+    }
 
     @GetMapping("/attachments/{id}")
-    public ResponseEntity<Blob> downloadAttachment(@PathVariable("id") Long id) throws SQLException {
-        Attachment attachment = attachmentsService.getAttachment(id);
-        Blob blob = new SerialBlob(attachment.getData());
-        return new ResponseEntity<>(blob, HttpStatus.OK);
+    public ResponseEntity<byte[]> downloadAttachment(@PathVariable("id") Long id) throws SQLException {
+        List<byte[]> files = attachmentsService.getAttachment(id).map(attachment -> {
+            byte[] data = attachment.getData();
+
+            return data;
+        }).toList();
+        System.out.println("-------------------------------------------------------");
+        System.out.println(files.get(0).length);
+        return new ResponseEntity<>(files.get(0), HttpStatus.OK);
     }
 
 

@@ -19,6 +19,7 @@ export class ComposeComponent implements OnInit {
   fileName: string = '';
   files: string[] | undefined = [];
   id: any;
+  file: any;
 
   constructor(private service: UserService, private emailService: EmailService) { }
 
@@ -69,6 +70,13 @@ export class ComposeComponent implements OnInit {
     if (this.receivers?.length != 0) {
       this.receivers?.splice(this.receivers?.indexOf(receiver),1);
     }
+  }
+
+  removeFile(file: any) {
+    if (this.files?.length != 0) {
+      this.files?.splice(this.files?.indexOf(file),1);
+    }
+    this.fileName = '';
   }
 
   saveDraft() {
