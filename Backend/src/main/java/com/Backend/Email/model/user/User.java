@@ -181,7 +181,7 @@ public class User implements Serializable {
             int index = this.deleted.indexOf(currEmail.getId());
             this.deleted.remove(index);
             this.deletionTime.remove(index);
-            if(currEmail.getFromWho().equals(email) && this.sent.contains(Long.valueOf(currEmail.getId()))){
+            if(currEmail.getFromWho().equals(email) && !this.sent.contains(Long.valueOf(currEmail.getId()))){
                 this.sent.add(currEmail.getId());
             }else{
                 this.inbox.add(currEmail.getId());
