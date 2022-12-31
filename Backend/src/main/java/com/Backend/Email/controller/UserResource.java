@@ -90,6 +90,7 @@ public class UserResource {
 
         boolean finished = true;
         EmailBuilder emailBuilder = new EmailBuilder();
+        User user = userService.findUser(from);
 
         finished = emailBuilder.setFrom(from) && finished;
         finished = emailBuilder.setTo(to) && finished;
@@ -100,8 +101,9 @@ public class UserResource {
         emailBuilder.setAttachments(attachments, attachmentsService);
         emailBuilder.setDate(LocalDateTime.now());
         emailBuilder.setId(id);
+        emailBuilder.setName(user.getName());
 
-        User user = userService.findUser(from);
+
         Email email = emailService.addEmail(emailBuilder.getEmail());
 
         System.out.println(finished);
@@ -135,11 +137,20 @@ public class UserResource {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        Attachment attachment = attachmentsService.store(file);
-
-        return ResponseEntity.status(HttpStatus.OK).body(attachment.getId());
+//    @PostMapping("/upload")
+//    public ResponseEntity<Long> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+//       //// Attachment attachment = attachmentsService.store(file);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(attachment.getId());
+//    }
+//
+    @PostMapping("/email/recover/{email}/{ids}")
+    public ResponseEntity recoverEmails(@PathVariable("ids") List<Long> ids, @PathVariable("email") String email){
+        User user = userService.findUser(email);
+        List<Email> emails = emailService.findEmails(ids);
+        user.recoverEmails(emails);
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/attachments/{id}")
@@ -149,8 +160,6 @@ public class UserResource {
 
             return data;
         }).toList();
-        System.out.println("-------------------------------------------------------");
-        System.out.println(files.get(0).length);
         return new ResponseEntity<>(files.get(0), HttpStatus.OK);
     }
 

@@ -21,18 +21,30 @@ public class Email implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true, nullable = false)
     private Long id;
+    private String name;
     private String fromWho;
     @ElementCollection
     private List<String> toWho;
     private String subject;
     private LocalDateTime date;//////
     private String body;
-    @Lob
-    @Column(name="file", columnDefinition = "BLOB")
+//    @Lob
+//    @Column(name="file", columnDefinition = "BLOB")
+    @ElementCollection
     private List<Long> attachments; /////// Turn the object to string and save cuz sql retarted
     private boolean seen;////// not needed modify it later
     private Integer importance;///////
     private Integer links;
+
+    public String getName() {
+        return name;
+    }
+
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
 
     public Email() {

@@ -82,6 +82,11 @@ public class EmailBuilder {
         return true;
     }
 
+    public boolean setName(String name){
+        this.email.setName(name);
+        return true;
+    }
+
     public Email getEmail(){
         return this.email;
     }
