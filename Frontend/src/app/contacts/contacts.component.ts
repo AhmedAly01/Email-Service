@@ -120,7 +120,8 @@ export class ContactsComponent implements OnInit {
   }
 
   sortContacts() {
-    this.sortService.sortFactory(this.sort, this.CONTACTS);
+    let sortFunc = this.sortService.sortFactory(this.sort);
+    sortFunc(this.CONTACTS);
   }
 
   selectContact(contact: any, event: any) {

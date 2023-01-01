@@ -100,7 +100,8 @@ export class TrashComponent implements OnInit {
   }
 
   sortEmails() {
-    this.sortService.sortFactory(this.sort, this.EMAILS);
+    let sortFunc = this.sortService.sortFactory(this.sort);
+    sortFunc(this.EMAILS);
   }
 
   selectEmail(email: any, event: any) {

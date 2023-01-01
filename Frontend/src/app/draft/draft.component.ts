@@ -55,7 +55,8 @@ export class DraftComponent implements OnInit {
   onTableDataChange(event: any) {
     this.page = event;
     this.getPosts();
-    this.sortService.sortFactory('dateNew', this.EMAILS);
+    let sortFunc = this.sortService.sortFactory('dateNew');
+    sortFunc(this.EMAILS);
   }
 
   deleteEmail(email: any, selected: boolean) {
@@ -99,7 +100,8 @@ export class DraftComponent implements OnInit {
   }
 
   sortEmails() {
-    this.sortService.sortFactory(this.sort, this.EMAILS);
+    let sortFunc = this.sortService.sortFactory(this.sort);
+    sortFunc(this.EMAILS);
   }
 
   selectEmail(email: any, event: any) {
