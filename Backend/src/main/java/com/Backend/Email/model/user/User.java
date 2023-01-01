@@ -1,12 +1,15 @@
 package com.Backend.Email.model.user;
 import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
+import com.Backend.Email.model.email.EmailBuilder;
 import com.Backend.Email.services.ContactService;
+import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.UserService;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -110,7 +113,7 @@ public class User implements Serializable {
                 '}';
     }
 
-    public void sendEmail(UserService userService, Email email){
+    public void sendEmail(UserService userService, Email email, EmailService emailService){
         email.setLinks(0);
         if(email.getId() != null){
             this.draft.remove(Long.valueOf(email.getId()));
@@ -130,6 +133,25 @@ public class User implements Serializable {
                 notExist.add(toWho.get(i));
         }
         ///send a message to the inbox saying that the email doesn't exist /// to do
+        if(!notExist.isEmpty()){
+            EmailBuilder emailBuilder = new EmailBuilder();
+            emailBuilder.setFrom("DOE@Amail.com");
+            emailBuilder.setTo(Arrays.asList(this.email)); //////////// fixxxx
+            emailBuilder.setSubject("Email not valid");
+            String body = "The following emails your were trying to message are non existent:";
+            for(int i=0;i<notExist.size();i++){
+                body = body.concat("\n" + notExist.get(i));
+            }
+            emailBuilder.setBody(body);
+            emailBuilder.setPriority(0);
+            emailBuilder.setDate(LocalDateTime.now());
+            emailBuilder.setName("AMail support team");
+            emailBuilder.setLinks(1);
+            Email alertEmail = emailService.addEmail(emailBuilder.getEmail());
+            this.inbox.add(alertEmail.getId());
+            System.out.println(alertEmail.toString());
+            /////////////////improve this part
+        }
     }
 
     public void addToDraft(Long id, UserService userService){

@@ -109,10 +109,8 @@ public class UserResource {
         System.out.println(finished);
         System.out.println(draft);
         if(finished && !draft) {
-            List<Integer> notExist = null;
-
             if (user != null) {
-                user.sendEmail(userService, email);
+                user.sendEmail(userService, email, emailService);
             }
         }else{
             user.addToDraft(email.getId(), userService);

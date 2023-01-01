@@ -87,6 +87,10 @@ public class EmailBuilder {
         return true;
     }
 
+    public void setLinks(int links){
+        this.email.setLinks(links);
+    }
+
     public Email getEmail(){
         return this.email;
     }
