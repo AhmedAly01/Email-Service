@@ -2,6 +2,7 @@ package com.Backend.Email.model.user;
 import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
+import com.Backend.Email.model.email.EmailBuilderIF;
 import com.Backend.Email.services.ContactService;
 import com.Backend.Email.services.EmailService;
 import com.Backend.Email.services.UserService;
@@ -121,7 +122,7 @@ public class User implements Serializable {
                 '}';
     }
 
-    public void sendEmail(UserService userService, Email email, EmailService emailService){
+    public void sendEmail(UserService userService, Email email, EmailService emailService) {
         email.setLinks(0);
         if(email.getId() != null){
             this.draft.remove(Long.valueOf(email.getId()));
@@ -143,7 +144,7 @@ public class User implements Serializable {
         }
         ///send a message to the inbox saying that the email doesn't exist /// to do
         if(!notExist.isEmpty()){
-            EmailBuilder emailBuilder = new EmailBuilder();
+            EmailBuilderIF emailBuilder = new EmailBuilder();
             emailBuilder.setFrom("DOE@Amail.com");
             emailBuilder.setTo(Arrays.asList(this.email)); //////////// fixxxx
             emailBuilder.setSubject("Email not valid");

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class EmailBuilder {
+public class EmailBuilder implements EmailBuilderIF{
     Email email;
 
 

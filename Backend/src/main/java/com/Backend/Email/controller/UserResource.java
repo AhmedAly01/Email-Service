@@ -5,6 +5,7 @@ import com.Backend.Email.model.attachment.ResponseAttachment;
 import com.Backend.Email.model.contact.Contact;
 import com.Backend.Email.model.email.Email;
 import com.Backend.Email.model.email.EmailBuilder;
+import com.Backend.Email.model.email.EmailBuilderIF;
 import com.Backend.Email.model.user.User;
 import com.Backend.Email.services.AttachmentsService;
 import com.Backend.Email.services.ContactService;
@@ -89,7 +90,7 @@ public class UserResource {
                                @RequestParam(value = "draft", required = true) boolean draft) throws IOException {
 
         boolean finished = true;
-        EmailBuilder emailBuilder = new EmailBuilder();
+        EmailBuilderIF emailBuilder = new EmailBuilder();
         User user = userService.findUser(from);
 
         finished = emailBuilder.setFrom(from) && finished;
