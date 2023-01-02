@@ -36,10 +36,10 @@
   <div style="display: flex; margin: 1%">
     <select class="send-btn" [(ngModel)]="priority" name="priority" required>
       <option value="0" disabled selected hidden>Priority</option>
-      <option value="1">Urgent</option>
-      <option value="2">Work</option>
-      <option value="3">Personal</option>
-      <option value="4">Advertisement</option>
+      <option value="4">4</option>
+      <option value="3">3</option>
+      <option value="2">2</option>
+      <option value="1">1</option>
     </select>
     <button type="submit" class="send-btn" [disabled]="emailCompose.invalid || (receivers!.length == 0)" (click)="sendEmail()">Send!</button>
     <button class="send-btn" (click)="saveDraft()">Save draft!</button>
