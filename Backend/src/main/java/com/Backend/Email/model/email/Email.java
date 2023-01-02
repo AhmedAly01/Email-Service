@@ -48,6 +48,7 @@ public class Email implements Serializable {
 
 
     public Email() {
+        this.seen = true;
         this.links = 0;
     }
 

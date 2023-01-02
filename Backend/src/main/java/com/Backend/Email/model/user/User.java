@@ -38,10 +38,10 @@ public class User implements Serializable {
     private List<Long> deleted;
 
     @ElementCollection
+    private List<Long> notSeen;
+
+    @ElementCollection
     private List<LocalDateTime> deletionTime;
-
-
-
 
     public User() {}
 
@@ -53,6 +53,14 @@ public class User implements Serializable {
 
     public List<LocalDateTime> getDeletionTime() {
         return deletionTime;
+    }
+
+    public List<Long> getNotSeen() {
+        return notSeen;
+    }
+
+    public void setNotSeen(List<Long> notSeen) {
+        this.notSeen = notSeen;
     }
 
     public String getPassword() {
@@ -127,6 +135,7 @@ public class User implements Serializable {
             User toWhom = userService.findUser(toWho.get(i));
             if(toWhom != null) {
                 toWhom.inbox.add(email.getId());
+                toWhom.addToNotSeen(email.getId());
                 userService.saveUser(toWhom);
                 email.addAlink();
             }else
@@ -149,8 +158,7 @@ public class User implements Serializable {
             emailBuilder.setLinks(1);
             Email alertEmail = emailService.addEmail(emailBuilder.getEmail());
             this.inbox.add(alertEmail.getId());
-            System.out.println(alertEmail.toString());
-            /////////////////improve this part
+            this.addToNotSeen(alertEmail.getId());
         }
     }
 
@@ -183,6 +191,11 @@ public class User implements Serializable {
         int index = this.deleted.indexOf(id);
         this.deleted.remove(index);
         this.deletionTime.remove(index);
+
+        index = this.notSeen.indexOf(id);
+        if(index != -1){
+            this.removeFromNotSeen(id);
+        }
     }
 
 
@@ -209,5 +222,13 @@ public class User implements Serializable {
                 this.inbox.add(currEmail.getId());
             }
         }
+    }
+
+    public void addToNotSeen(Long id){
+        this.notSeen.add(id);
+    }
+
+    public void removeFromNotSeen(Long id){
+        this.notSeen.remove(Long.valueOf(id));
     }
 }
