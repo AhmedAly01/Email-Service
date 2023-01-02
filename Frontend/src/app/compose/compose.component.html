@@ -14,12 +14,10 @@
     <div class="input-compose">
       <label>Subject</label>
       <input type="text" placeholder="Subject" class="text-box-compose" [(ngModel)]="subject" name="subject" #subjectInput="ngModel" required>
-      <div class="error" *ngIf="subjectInput.invalid && subjectInput.touched">*this field is required</div>
     </div>
     <div class="input-compose">
       <label>Body</label>
       <textarea placeholder="body" class="text-area-compose" [(ngModel)]="body" name="body" #bodyInput="ngModel" required></textarea>
-      <div class="error" *ngIf="bodyInput.invalid && bodyInput.touched">*this field is required</div>
     </div>
   </form>
   <div style="display: flex; flex-direction: column; text-align: left; margin: 1%">

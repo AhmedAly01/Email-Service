@@ -30,6 +30,7 @@
   <table>
     <tr style="background-color: #D9D9D9">
       <td></td>
+      <td></td>
       <td>name</td>
       <td>from</td>
       <td>To</td>
@@ -44,6 +45,8 @@
                 };
           let i = index">
       <td><input type="checkbox" (change)="selectEmail(email, $event)"></td>
+      <td (click)="popUp(email)" *ngIf="!email.seen"><img src="assets/img/seen.svg" width="15" height="15" alt="Text"></td>
+      <td (click)="popUp(email)" *ngIf="email.seen"></td>
       <td (click)="popUp(email)">{{email.name}}</td>
       <td (click)="popUp(email)">{{email.fromWho}}</td>
       <td (click)="popUp(email)">{{email.toWho}}</td>

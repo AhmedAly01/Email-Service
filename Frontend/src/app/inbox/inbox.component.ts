@@ -82,12 +82,11 @@ export class InboxComponent implements OnInit {
       this.attachments = res;
     });
 
-    console.log(this.service.email);
     if(!this.email.seen){
       this.email.seen = true;
       this.service.seenEmail(this.service.email! , this.email.id);
     }
-    
+
     document.getElementById('light')!.style.display='block';
     document.getElementById('fade')!.style.display='block';
   }

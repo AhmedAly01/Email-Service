@@ -320,6 +320,8 @@ tr:active{
 }
 
 .tool-container{
+  align-items: center;
+  align-content: center;
   display: flex;
   padding: 0.5%;
   margin: 0.5%;
