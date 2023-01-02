@@ -18,7 +18,7 @@ export class DraftComponent implements OnInit {
   EMAILS: any;
   page: number = 1;
   count: number = 0;
-  tableSize: number = 11;
+  tableSize: number = 8;
   draft: number[] | undefined = [];
   reload: boolean | undefined = false;
   key: any;
