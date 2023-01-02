@@ -166,6 +166,17 @@ public class UserResource {
     @GetMapping("/email/getEmails/{email}/{folderName}/{ids}")
     public ResponseEntity<List<Email>>  getEmails(@PathVariable List<Long> ids, @PathVariable String folderName, @PathVariable String email){
         List<Email> emails = emailService.findEmails(ids);
+
+        if(folderName.equals("inbox")){
+            User user = userService.findUser(email);
+            List<Long> notSeen = user.getNotSeen();
+            for (Email currEmail : emails) {
+                if (notSeen.contains(currEmail.getId())) {
+                    currEmail.setSeen(false);
+                }
+            }
+        }
+
         if(folderName.equals("trash")){
             LocalDateTime currDateTime = LocalDateTime.now().minusDays(30);
             User user = userService.findUser(email);
@@ -185,8 +196,15 @@ public class UserResource {
             if(user != null)
                 userService.saveUser(user);
         }
-        System.out.println(emails.toString());
         return new ResponseEntity<>(emails, HttpStatus.OK);
+    }
+
+    @PostMapping("/email/seen")
+    public ResponseEntity removeFromNotSeen(@RequestParam("email") String email, @RequestParam("id") Long id){
+        User user = userService.findUser(email);
+        user.removeFromNotSeen(Long.valueOf(id));
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/email/delete/{email}/{id}/{folderName}")

@@ -1,8 +1,8 @@
+import { Email } from './../../models/email/email';
 import { Injectable } from '@angular/core';
 import {User} from "../../models/user/user";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Email} from "../../models/email/email";
 import {Contact} from "../../models/contact/contact";
 
 @Injectable({
@@ -84,6 +84,8 @@ export class UserService {
   }
 
   getAttachsUrl(attachIds: number[]){
+    if(attachIds.length == 0)
+      attachIds = [-1]
     return this.http.get("http://localhost:8080/email/get/attachments/" + attachIds)
   }
 
@@ -99,5 +101,13 @@ export class UserService {
       a.download = attachPara["name"];
       a.click();
     });
+  }
+
+  seenEmail(email: string, id: number){
+    let params = new HttpParams();
+    params = params.append('email', email);
+    params = params.append('id', id);
+
+    this.http.post('http://localhost:8080/email/seen', params).subscribe();
   }
 }

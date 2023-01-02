@@ -35,5 +35,6 @@ export class HomeComponent implements OnInit {
     this.authGuard.isSignedIn = false;
     this.signedAuth.isSignedIn = false;
     this.router.navigateByUrl('').then();
+    this.cache.user = undefined;
   }
 }
