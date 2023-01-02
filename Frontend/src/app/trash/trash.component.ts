@@ -17,7 +17,7 @@ export class TrashComponent implements OnInit {
   email: any = '';
   page: number = 1;
   count: number = 0;
-  tableSize: number = 11;
+  tableSize: number = 8;
   trash: number[] | undefined = [];
   reload: boolean | undefined;
   key: any;

@@ -17,7 +17,7 @@ export class InboxComponent implements OnInit {
   email: any = '';
   page: number = 1;
   count: number = 0;
-  tableSize: number = 11;
+  tableSize: number = 8;
   inbox: number[] | undefined = [];
   reload: boolean | undefined = false;
   key: any;

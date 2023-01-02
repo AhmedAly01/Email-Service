@@ -16,7 +16,7 @@ import {SortService} from "../service/sort/sort.service";
 export class ContactsComponent implements OnInit {
   page: number = 1;
   count: number = 0;
-  tableSize: number = 11;
+  tableSize: number = 8;
   name: string | undefined = '';
   email: string | undefined = '';
   emails: string[] | undefined = [];

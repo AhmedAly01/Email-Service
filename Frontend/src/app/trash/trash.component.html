@@ -35,6 +35,7 @@
       <td>from</td>
       <td>To</td>
       <td>subject</td>
+      <td>priority</td>
       <td>date</td>
     </tr>
     <tr *ngFor="let email of EMAILS | paginate
@@ -49,6 +50,7 @@
       <td (click)="popUp(email)">{{email.fromWho}}</td>
       <td (click)="popUp(email)">{{email.toWho}}</td>
       <td (click)="popUp(email)">{{email.subject}}</td>
+      <td (click)="popUp(email)">{{email.importance}}</td>
       <td (click)="popUp(email)">{{email.date}}</td>
       <td (click)="deleteEmail(email, false)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>
       <td (click)="recoverEmails(email, false)" class="delete-btn"><img src="assets/img/recover.svg" width="25" height="25" alt="Text"></td>
