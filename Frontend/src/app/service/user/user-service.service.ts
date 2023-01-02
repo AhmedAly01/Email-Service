@@ -85,7 +85,7 @@ export class UserService {
 
   getAttachsUrl(attachIds: number[]){
     if(attachIds.length == 0)
-      attachIds = [-1]
+      return;
     return this.http.get("http://localhost:8080/email/get/attachments/" + attachIds)
   }
 

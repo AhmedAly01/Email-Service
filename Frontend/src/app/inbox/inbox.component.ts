@@ -78,7 +78,7 @@ export class InboxComponent implements OnInit {
 
   popUp(email: any) {
     this.email = email;
-    this.service.getAttachsUrl(this.email.attachments).subscribe((res) =>{
+    this.service.getAttachsUrl(this.email.attachments)?.subscribe((res) =>{
       this.attachments = res;
     });
 
