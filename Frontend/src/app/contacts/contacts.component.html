@@ -21,6 +21,8 @@
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getContacts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <button class="tool-btn" (click)="deleteContact(null, true)"><img src="assets/img/trash.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <button class="tool-btn" (click)="selectAll()"><img src="assets/img/selectAll.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <button class="tool-btn" (click)="unselectAll()"><img src="assets/img/UnselectAll.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortContacts()">
       <option value="" disabled selected hidden>Sort By</option>
       <option value="ascending">(A-z)</option>
@@ -47,7 +49,7 @@
                   totalItems: count
                 };
           let i = index">
-      <td><input type="checkbox" (change)="selectContact(contact, $event)"></td>
+      <td><input type="checkbox" #checkboxes (change)="selectContact(contact, $event)"></td>
       <td (click)="compose(contact)">{{contact.name}}</td>
       <td (click)="compose(contact)">{{contact.emails}}</td>
       <td (click)="deleteContact(contact, false)" class="delete-btn"><img src="assets/img/trash.svg" width="25" height="25" alt="Text"></td>

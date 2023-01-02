@@ -3,6 +3,8 @@
   <div class="tool-container">
     <button class="tool-btn" (click)="reload=true; getPosts();"><img src="assets/img/reload.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);"></button>
     <button class="tool-btn" (click)="deleteEmail(null, true)"><img src="assets/img/trash.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <button class="tool-btn" (click)="selectAll()"><img src="assets/img/selectAll.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
+    <button class="tool-btn" (click)="unselectAll()"><img src="assets/img/UnselectAll.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <button class="tool-btn" (click)="recoverEmails(null, true)"><img src="assets/img/recover.svg" width="25" height="25" style="filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);" alt="Text"></button>
     <select class="tool-btn" [(ngModel)]="sort" (ngModelChange)="sortEmails()">
       <option value="" disabled selected hidden>Sort By</option>
@@ -45,7 +47,7 @@
                   totalItems: count
                 };
           let i = index">
-      <td><input type="checkbox" (change)="selectEmail(email, $event)"></td>
+      <td><input type="checkbox" #checkboxes (change)="selectEmail(email, $event)"></td>
       <td (click)="popUp(email)">{{email.name}}</td>
       <td (click)="popUp(email)">{{email.fromWho}}</td>
       <td (click)="popUp(email)">{{email.toWho}}</td>

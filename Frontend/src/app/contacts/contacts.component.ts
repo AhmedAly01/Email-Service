@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Contact} from "../models/contact/contact";
 import {UserService} from "../service/user/user-service.service";
 import {Router} from "@angular/router";
@@ -14,6 +14,7 @@ import {SortService} from "../service/sort/sort.service";
   styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnInit {
+  @ViewChildren('checkboxes') checkboxes!: QueryList<ElementRef<HTMLInputElement>>;
   page: number = 1;
   count: number = 0;
   tableSize: number = 8;
@@ -132,5 +133,22 @@ export class ContactsComponent implements OnInit {
       this.selected.splice(this.selected.indexOf(contact),1);
     }
     console.log(this.selected);
+  }
+
+  selectAll() {
+    this.selected = []
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = true;
+    }
+    for (let email of this.CONTACTS){
+      this.selected.push(email);
+    }
+  }
+
+  unselectAll() {
+    this.selected = [];
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = false;
+    }
   }
 }

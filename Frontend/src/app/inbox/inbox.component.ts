@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {UserService} from "../service/user/user-service.service";
 import {User} from "../models/user/user";
 import {Router} from "@angular/router";
@@ -13,6 +13,7 @@ import {FilterService} from "../service/filter/filter.service";
   styleUrls: ['./inbox.component.css']
 })
 export class InboxComponent implements OnInit {
+  @ViewChildren('checkboxes') checkboxes!: QueryList<ElementRef<HTMLInputElement>>;
   EMAILS: any;
   email: any = '';
   page: number = 1;
@@ -137,4 +138,20 @@ export class InboxComponent implements OnInit {
     }
   }
 
+  selectAll() {
+    this.selected = []
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = true;
+    }
+    for (let email of this.EMAILS){
+      this.selected.push(email);
+    }
+  }
+
+  unselectAll() {
+    this.selected = [];
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = false;
+    }
+  }
 }

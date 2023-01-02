@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {UserService} from "../service/user/user-service.service";
 import {Router} from "@angular/router";
 import {AuthGuard} from "../guards/auth.guard";
@@ -15,6 +15,7 @@ import {FilterService} from "../service/filter/filter.service";
   styleUrls: ['./draft.component.css']
 })
 export class DraftComponent implements OnInit {
+  @ViewChildren('checkboxes') checkboxes!: QueryList<ElementRef<HTMLInputElement>>;
   EMAILS: any;
   page: number = 1;
   count: number = 0;
@@ -118,6 +119,23 @@ export class DraftComponent implements OnInit {
     this.EMAILS = this.filterService.filter(key, this.criteria, this.EMAILS);
     if (this.EMAILS === 0 || !key) {
       this.getPosts();
+    }
+  }
+
+  selectAll() {
+    this.selected = []
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = true;
+    }
+    for (let email of this.EMAILS){
+      this.selected.push(email);
+    }
+  }
+
+  unselectAll() {
+    this.selected = [];
+    for (let checkbox of this.checkboxes.toArray()){
+      checkbox.nativeElement.checked = false;
     }
   }
 
